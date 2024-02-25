@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const database = require('../util/con_db');
+const supabase = require('../util/con_db');
 
 const login = (req, res, next) => {
     res.status(200).json({
