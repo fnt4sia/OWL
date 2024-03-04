@@ -20,3 +20,6 @@ Dengan OWL, pembelajaran menjadi lebih menyenangkan, terhubung, dan efektif.
 - Supabase as Database Service
 - Express JS for Backend Framework
 - Multer as Middleware
+
+Figma 
+https://www.figma.com/files/team/1341298683536015772/OWL-ITC-PROJECT?fuid=1232658225515934305
