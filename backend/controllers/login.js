@@ -1,5 +1,3 @@
-const jwt = require('jsonwebtoken');
-const bcrypt = require('bcryptjs');
 const supabase = require('../util/con_db');
 
 /////////////////////////////////////////////////////login with email/////////////////////////////////////////////////////
