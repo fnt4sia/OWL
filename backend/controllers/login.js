@@ -61,5 +61,4 @@ const registerEmail = async (req, res, next) => {
     }
 }
 
-
 module.exports = { loginEmail, registerEmail };
