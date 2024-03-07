@@ -2,41 +2,27 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const supabase = require('../util/con_db');
 
-const login = (req, res, next) => {
+/////////////////////////////////////////////////////login with email/////////////////////////////////////////////////////
+const loginEmail = async (req, res, next) => {
     try {
-        async function login() {
-            const { data, error } = await supabase.auth.signInWithPassword({
-                email: req.body.email,
-                password: req.body.password,
-                data: {
-                    full_name: req.body.full_name
-                }
-            });
-
-            if (error) {
-                res.status(500).json({
-                    message: error.message
-                });
-            } else {
-                res.status(200).json({
-                    message: 'User logged in successfully!',
-                    data: data
-                });
-            }
-        }
-
-        login();
-
+        const { data, error } = await supabase.auth.signInWithPassword({
+            email: req.body.email,
+            password: req.body.password
+        });
+        
         if (error) {
             res.status(500).json({
                 message: error.message
             });
-        } else {
+            return;
+        } else if (data) {
             res.status(200).json({
                 message: 'User logged in successfully!',
+                status: error,
                 data: data
             });
         }
+
     } catch (error) {
         res.status(500).json({
             message: error.message
@@ -44,17 +30,23 @@ const login = (req, res, next) => {
     }
 }
 
-const register = (req, res, next) => {
+/////////////////////////////////////////////////////register with email/////////////////////////////////////////////////////
+const registerEmail = async (req, res, next) => {
     try {
-        const { data, error } = supabase.auth.signUp({
+        //check if email already exists
+        const { check } = await supabase.from('auth.users').select('email').eq('email', req.body.email);
+        
+        if (check === undefined) {
+            throw new Error("user already exists!");
+        }
+
+        const { data, error } = await supabase.auth.signUp({
             email: req.body.email,
             password: req.body.password
         });
 
         if (error) {
-            res.status(500).json({
-                message: error.message
-            });
+            throw new Error(error.message);
         } else {
             res.status(201).json({
                 message: 'User created successfully!',
@@ -69,4 +61,5 @@ const register = (req, res, next) => {
     }
 }
 
-module.exports = { login, register };
+
+module.exports = { loginEmail, registerEmail };

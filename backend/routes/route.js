@@ -1,5 +1,5 @@
 const express = require('express');
-const { login, register } = require('../controllers/login');
+const { loginEmail, registerEmail } = require('../controllers/login');
 const supabase = require('../util/con_db');
 
 const router = express.Router();
@@ -12,8 +12,8 @@ router.get('/', (req, res, next) => {
     });
 })
 
-router.post('/login', login);
+router.post('/login', loginEmail);
 
-router.post('/register', register);
+router.post('/register', registerEmail);
 
 module.exports = router;
