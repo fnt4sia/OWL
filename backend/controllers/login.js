@@ -1,5 +1,7 @@
 const supabase = require('../util/con_db');
 
+dev = true;
+
 /////////////////////////////////////////////////////login with email/////////////////////////////////////////////////////
 const loginEmail = async (req, res, next) => {
     try {
@@ -14,6 +16,8 @@ const loginEmail = async (req, res, next) => {
             });
             return;
         } else if (data) {
+            res.cookie('session', data.session, { httpOnly: true, secure: dev ? false : true })
+            res.cookie('id', data.user.id, { httpOnly: true, secure: dev ? false : true })
             res.status(200).json({
                 message: 'User logged in successfully!',
                 status: error,
@@ -55,7 +59,8 @@ const registerEmail = async (req, res, next) => {
                 id: data.user.id,
                 username: username
             })
-
+            res.cookie('id', data.user.id, { httpOnly: true, secure: dev ? false : true })
+            res.cookie('session', data.session, { httpOnly: true, secure: dev ? false : true })
             res.status(201).json({
                 message: 'User created successfully!',
                 data: data
@@ -71,6 +76,9 @@ const registerEmail = async (req, res, next) => {
 
 const deleteUser = async (req, res, next) => {
     try {
+        id = req.headers.cookie.split(';').find(c => c.trim().startsWith('id=')).split('=')[1];
+        console.log(id);
+        error = true;
         const { error } = await supabase.auth.admin.deleteUser(req.body.id); 
 
         if (error) {
