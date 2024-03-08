@@ -82,17 +82,18 @@ const registerEmail = async (req, res, next) => {
 }
 
 
-/////////////////////////////////////////////////////delete user/////////////////////////////////////////////////////
+/////////////////////////////////////////////////////delete user/////////////////////////////////////////////////////z
 const deleteUser = async (req, res, next) => {
     try {
         id = await getUserID(req);
-        console.log(id);
 
         const { error } = await supabase.auth.admin.deleteUser(id); 
 
         if (error) {
             throw new Error(error.message);
         } else {
+            res.clearCookie('id');
+            res.clearCookie('session');
             res.status(200).json({
                 message: 'User deleted successfully!'
             });
