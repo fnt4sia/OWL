@@ -1,5 +1,5 @@
 const express = require('express');
-const { loginEmail, registerEmail, deleteUser } = require('../controllers/login');
+const { loginEmail, registerEmail, deleteUser } = require('../controllers/user');
 const supabase = require('../util/con_db');
 
 const router = express.Router();
