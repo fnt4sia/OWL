@@ -16,6 +16,6 @@ router.post('/login', loginEmail);
 
 router.post('/register', registerEmail);
 
-router.post('/delete', deleteUser);
+router.delete('/delete', deleteUser);
 
 module.exports = router;
