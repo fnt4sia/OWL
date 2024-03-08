@@ -2,6 +2,8 @@ const supabase = require('../util/con_db');
 
 dev = true;
 
+const getUserID = (req) => req.headers.cookie.split(';').find(c => c.trim().startsWith('id=')).split('=')[1];
+
 /////////////////////////////////////////////////////login with email/////////////////////////////////////////////////////
 const loginEmail = async (req, res, next) => {
     try {
@@ -36,18 +38,22 @@ const loginEmail = async (req, res, next) => {
 const registerEmail = async (req, res, next) => {
     try {
         //check if email already exists
-        const { check } = await supabase.from('auth.users').select('email').eq('email', req.body.email);
+        const { data: users, error } = await supabase.from('profiles').select('email').eq('email', req.body.email);
         
-        if (check !== undefined) {
+        if (error) {
+            throw error;
+        }
+
+        if (users.length > 0) {
             throw new Error("user already exists!");
         }
 
-        const { data, error } = await supabase.auth.signUp({
+        const { data, error: errorSignup } = await supabase.auth.signUp({
             email: req.body.email,
             password: req.body.password
         });
 
-        if (error) {
+        if (errorSignup) {
             throw new Error(error.message);
         } else {
             const username = req.body.email.split('@')[0];
@@ -57,7 +63,8 @@ const registerEmail = async (req, res, next) => {
             .from('profiles')
             .insert({
                 id: data.user.id,
-                username: username
+                username: username,
+                email: req.body.email
             })
             res.cookie('id', data.user.id, { httpOnly: true, secure: dev ? false : true })
             res.cookie('session', data.session, { httpOnly: true, secure: dev ? false : true })
@@ -76,10 +83,10 @@ const registerEmail = async (req, res, next) => {
 
 const deleteUser = async (req, res, next) => {
     try {
-        id = req.headers.cookie.split(';').find(c => c.trim().startsWith('id=')).split('=')[1];
+        id = await getUserID(req);
         console.log(id);
-        error = true;
-        const { error } = await supabase.auth.admin.deleteUser(req.body.id); 
+
+        const { error } = await supabase.auth.admin.deleteUser(id); 
 
         if (error) {
             throw new Error(error.message);
