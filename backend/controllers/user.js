@@ -5,6 +5,29 @@ dev = true;
 const getUserID = (req) => req.headers.cookie.split(';').find(c => c.trim().startsWith('id=')).split('=')[1];
 const getUserSession = (req) => req.headers.cookie.split(';').find(c => c.trim().startsWith('session=')).split('=')[1];
 
+/////////////////////////////////////////////////////oauth/////////////////////////////////////////////////////
+const oauth = async (req, res, next) => {
+    try {
+        const { data, error } = await supabase.auth.signInWithOAuth({
+            provider: req.params.provider
+        });
+
+        if (error) {
+            res.status(500).json({
+                message: error.message
+            });
+            return;
+        } else if (data) {
+            res.status(200).redirect(data.url);
+        }
+
+    } catch (error) {
+        res.status(500).json({
+            message: error.message
+        });
+    }
+}
+
 /////////////////////////////////////////////////////login with email/////////////////////////////////////////////////////
 const loginEmail = async (req, res, next) => {
     try {
@@ -169,4 +192,4 @@ const recoverPassword = async (req, res, next) => {
     
 }
 
-module.exports = { loginEmail, registerEmail, deleteUser, recoverAccount, recoverPassword };
+module.exports = { loginEmail, registerEmail, deleteUser, recoverAccount, recoverPassword, oauth };
