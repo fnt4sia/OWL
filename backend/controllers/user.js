@@ -106,4 +106,58 @@ const deleteUser = async (req, res, next) => {
     }
 }
 
-module.exports = { loginEmail, registerEmail, deleteUser };
+const recoverAccount = async (req, res, next) => {
+    try {
+        const { data: users, error: checks } = await supabase.from('profiles').select('email').eq('email', req.body.email);
+        
+        if (checks) {
+            throw error;
+        }
+
+        if (users.length == 0) {
+            throw new Error("user doesnt exists!");
+        }
+
+        const { error } = await supabase.auth.resetPasswordForEmail(req.body.email);
+        if (error) {
+            throw new Error(error.message);
+        } else {
+            res.status(200).json({
+                message: 'Password Recovery already sent to your email!'
+            });
+        }
+    } catch(error) {
+        res.status(500).json({
+            message: error.message
+        });
+    }
+}
+
+const recoverPassword = async (req, res, next) => {
+    try {
+        const { error: checks } = await supabase.auth.getSession(req.headers.authorization);
+
+        if (checks) {
+            throw new Error(error.message);
+        }
+
+        const { error } = await supabase.auth.updateUser({
+            password: req.body.password
+        });
+
+        if (error) {
+            throw new Error(error.message);
+        } else {
+            res.status(200).json({
+                message: 'Password is recovered!'
+            });
+        }
+    } catch (error){
+        res.status(500).json({
+            message: error.message
+        });
+    }
+    
+}
+
+module.exports = { loginEmail, registerEmail, deleteUser, recoverAccount, recoverPassword };

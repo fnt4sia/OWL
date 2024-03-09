@@ -1,5 +1,5 @@
 const express = require('express');
-const { loginEmail, registerEmail, deleteUser } = require('../controllers/user');
+const { loginEmail, registerEmail, deleteUser, recoverAccount, recoverPassword } = require('../controllers/user');
 const supabase = require('../util/con_db');
 
 const router = express.Router();
@@ -17,5 +17,9 @@ router.post('/login', loginEmail);
 router.post('/register', registerEmail);
 
 router.delete('/delete', deleteUser);
+
+router.post('/recovery', recoverAccount);
+
+router.post('/recovery/password', recoverPassword);
 
 module.exports = router;
