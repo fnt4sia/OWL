@@ -124,7 +124,9 @@ const recoverAccount = async (req, res, next) => {
             throw new Error("user doesnt exists!");
         }
 
-        const { error } = await supabase.auth.resetPasswordForEmail(req.body.email);
+        const { error } = await supabase.auth.resetPasswordForEmail(req.body.email, {
+            redirectTo: 'http://localhost:3000/recover-password'
+        });
         if (error) {
             throw new Error(error.message);
         } else {
