@@ -19,7 +19,14 @@ const loginEmail = async (req, res, next) => {
             });
             return;
         } else if (data) {
-            res.cookie('session', data.session, { httpOnly: true, secure: dev ? false : true })
+            const session = {
+                "access_token": data.session.access_token,
+                "token_type": data.session.token_type,
+                "expires_in": data.session.expires_in,
+                "expires_at": data.session.expires_at,
+                "refresh_token": data.session.refresh_token,
+            }
+            res.cookie('session', session, { httpOnly: true, secure: dev ? false : true })
             res.cookie('id', data.user.id, { httpOnly: true, secure: dev ? false : true })
             res.status(200).json({
                 message: 'User logged in successfully!',
