@@ -67,7 +67,6 @@ const registerEmail = async (req, res, next) => {
                 email: req.body.email
             })
             res.cookie('id', data.user.id, { httpOnly: true, secure: dev ? false : true })
-            res.cookie('session', data.session, { httpOnly: true, secure: dev ? false : true })
             res.status(201).json({
                 message: 'User created successfully!'
             });
