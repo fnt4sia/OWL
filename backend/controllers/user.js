@@ -158,7 +158,7 @@ const recoverPassword = async (req, res, next) => {
             throw new Error(error.message);
         } else {
             res.status(200).json({
-                message: 'Password is recovered!'
+                message: 'Password is changed!'
             });
         }
     } catch (error){
