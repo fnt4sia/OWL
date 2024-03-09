@@ -78,24 +78,20 @@ const registerEmail = async (req, res, next) => {
             throw new Error("user already exists!");
         }
 
+        const username = req.body.email.split('@')[0];
         const { data, error: errorSignup } = await supabase.auth.signUp({
             email: req.body.email,
-            password: req.body.password
+            password: req.body.password,
+            options: {
+                data: {
+                    name: username
+                }
+            }
         });
 
         if (errorSignup) {
             throw new Error(error.message);
         } else {
-            const username = req.body.email.split('@')[0];
-
-            //insert user into profiles table
-            const { error } = await supabase
-            .from('profiles')
-            .insert({
-                id: data.user.id,
-                username: username,
-                email: req.body.email
-            })
             res.cookie('id', data.user.id, { httpOnly: true, secure: dev ? false : true })
             res.status(201).json({
                 message: 'User created successfully!'
