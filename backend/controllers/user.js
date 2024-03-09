@@ -3,6 +3,7 @@ const supabase = require('../util/con_db');
 dev = true;
 
 const getUserID = (req) => req.headers.cookie.split(';').find(c => c.trim().startsWith('id=')).split('=')[1];
+const getUserSession = (req) => req.headers.cookie.split(';').find(c => c.trim().startsWith('session=')).split('=')[1];
 
 /////////////////////////////////////////////////////login with email/////////////////////////////////////////////////////
 const loginEmail = async (req, res, next) => {
@@ -22,8 +23,7 @@ const loginEmail = async (req, res, next) => {
             res.cookie('id', data.user.id, { httpOnly: true, secure: dev ? false : true })
             res.status(200).json({
                 message: 'User logged in successfully!',
-                status: error,
-                data: data
+                email: req.body.email
             });
         }
 
@@ -69,8 +69,7 @@ const registerEmail = async (req, res, next) => {
             res.cookie('id', data.user.id, { httpOnly: true, secure: dev ? false : true })
             res.cookie('session', data.session, { httpOnly: true, secure: dev ? false : true })
             res.status(201).json({
-                message: 'User created successfully!',
-                data: data
+                message: 'User created successfully!'
             });
         }
 
@@ -106,6 +105,7 @@ const deleteUser = async (req, res, next) => {
     }
 }
 
+/////////////////////////////////////////////////////recover account/////////////////////////////////////////////////////
 const recoverAccount = async (req, res, next) => {
     try {
         const { data: users, error: checks } = await supabase.from('profiles').select('email').eq('email', req.body.email);
@@ -133,9 +133,10 @@ const recoverAccount = async (req, res, next) => {
     }
 }
 
+/////////////////////////////////////////////////////recover password/////////////////////////////////////////////////////
 const recoverPassword = async (req, res, next) => {
     try {
-        const { error: checks } = await supabase.auth.getSession(req.headers.authorization);
+        const { error: checks } = await supabase.auth.getSession(getUserSession(req));
 
         if (checks) {
             throw new Error(error.message);
