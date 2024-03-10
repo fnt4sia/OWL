@@ -17,7 +17,10 @@ const getSession = (req) => {
 const oauth = async (req, res, next) => {
     try {
         const { data, error } = await supabase.auth.signInWithOAuth({
-            provider: req.params.provider
+            provider: req.params.provider,
+            options: {
+                redirectTo: 'https://www.owlearns.site/home'
+            }
         });
 
         if (error) {
@@ -40,7 +43,10 @@ const loginEmail = async (req, res, next) => {
     try {
         const { data, error } = await supabase.auth.signInWithPassword({
             email: req.body.email,
-            password: req.body.password
+            password: req.body.password,
+            options: {
+                redirectTo: 'https://www.owlearns.site/home'
+            }
         });
         
         if (error) {
