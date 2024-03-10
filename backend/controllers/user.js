@@ -23,7 +23,9 @@ const oauth = async (req, res, next) => {
         if (error) {
             throw new Error(error.message);
         } else if (data) {
-            res.status(200).redirect(data.url);
+            res.status(200).json({
+                url: data.url
+            });
         }
 
     } catch (error) {

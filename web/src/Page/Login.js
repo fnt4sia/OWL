@@ -69,11 +69,17 @@ export default function LoginPage(){
                 </div>
                 <button onClick={sendData} className="bg-orange-400 p-1 rounded-md font-light mt-2 lg:mt-4 lg:text-lg">Login</button>
                 <hr className="my-4"/>
-                <button className="text-blue font-light p-1 lg:p-2 border border-blue-300 rounded-lg bg-white text-blue-300 flex justify-center items-center gap-2" onClick={oauth("google")}>
+                <button 
+                    className="text-blue font-light p-1 lg:p-2 border border-blue-300 rounded-lg bg-white text-blue-300 flex justify-center items-center gap-2" 
+                    onClick={() => oauth("google")}
+                >
                     <img alt='gugel'src={googleIcon} width={20} height={20}/>
                     Login With Google
                 </button>
-                <button className="text-blue font-light p-1 lg:p-2 border border-blue-300 rounded-lg mt-2 bg-white text-blue-300 flex justify-center items-center gap-2" onClick={oauth("github")}>
+                <button 
+                    className="text-blue font-light p-1 lg:p-2 border border-blue-300 rounded-lg mt-2 bg-white text-blue-300 flex justify-center items-center gap-2" 
+                    onClick={() => oauth("github")}
+                >
                     <img alt='github' src={githubIcon} width={20} height={20}/>Login With Github
                 </button>
                 
