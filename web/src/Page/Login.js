@@ -2,10 +2,7 @@ import googleIcon from '../Assets/google.png'
 import githubIcon from '../Assets/github.png'
 import image from '../Assets/image.png'
 import { useState } from 'react'
-import { createClient } from '@supabase/supabase-js'
-
-const supabase = createClient('https://gkrzpruurzsarotxqmbc.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdrcnpwcnV1cnpzYXJvdHhxbWJjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDk3MzMyNzksImV4cCI6MjAyNTMwOTI3OX0.1eijySnMEii0ybP3uN62CY_RC0SSxyiTBarOtCtU4m0')
-
+    
 export default function LoginPage(){
 
     const[email, setemail] = useState('');
@@ -19,12 +16,12 @@ export default function LoginPage(){
     }
 
     const sendData = async () => {
-        fetch('http://localhost:3000/login', {
+        fetch('https://nodejsdeployowl.et.r.appspot.com/login', {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({
-                'email': 'seviko.attalarik@gmail.com',
-                'password': '12345678',
+                'email': email,
+                'password': password,
             }),
             redirect: 'follow',
             credentials: 'include',
@@ -33,12 +30,6 @@ export default function LoginPage(){
         ).then((result) =>
             console.log(result)
         ).catch((err) => console.log(err))
-    }
-
-    const getData = async () => {
-        fetch('https://nodejsdeployowl.et.r.appspot.com/')
-        .then((res) => res.json())
-        .then((res) => console.log(res))
     }
 
     return(
