@@ -35,7 +35,8 @@ export default function LoginPage(){
     const oauth = async (provider) => {
         const requestOptions = {
             method: "POST",
-            redirect: "follow"
+            redirect: "follow",
+            mode: "no-cors",
           };
           
           fetch("https://nodejsdeployowl.et.r.appspot.com/oauth/" + provider, requestOptions)
