@@ -36,10 +36,6 @@ export default function LoginPage(){
         fetch('https://nodejsdeployowl.et.r.appspot.com/oauth/google', {
             method: 'POST',
             headers: {"Content-Type": "application/json"},
-            body: JSON.stringify({
-                'email': email,
-                'password': password,
-            }),
             redirect: 'follow',
             credentials: 'include'
         }).then((response) => 
