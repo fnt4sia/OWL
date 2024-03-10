@@ -4,17 +4,30 @@ const userRoute = require('./routes/user_route');
 
 const app = express();
 
+const allowedOrigins = ['http://localhost:3000', 'https://www.owlearns.site'];
 
-app.use(cors({
-    origin: 'https://www.owlearns.site/',
+const corsOptions = {
+    origin: function (origin, callback) {
+        if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
+            callback(null, true)
+        } else {
+            callback(new Error('Not allowed by CORS'))
+        }
+    },
     credentials: true
-}));
+};
+
+app.use(cors(corsOptions));
+
+app.use(cors(corsOptions));
 
 app.use(express.json());
 
+// app.use(express.urlencoded({ extended: false }));
+
 app.use(userRoute);
 
-port = process.env.PORT || 3000;
+const port = process.env.PORT || 3000;
 app.listen(port, () => {
     console.log('Server is running on port', port);
 });

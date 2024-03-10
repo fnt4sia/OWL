@@ -18,13 +18,13 @@ export default function LoginPage(){
     const sendData = async () => {
         fetch('https://nodejsdeployowl.et.r.appspot.com/login', {
             method: 'POST',
-            headers: {'Content-Type': 'application/json'},
+            headers: {"Content-Type": "application/json"},
             body: JSON.stringify({
                 'email': email,
                 'password': password,
             }),
             redirect: 'follow',
-            credentials: 'include',
+            credentials: 'include'
         }).then((response) => 
             response.text()
         ).then((result) =>
