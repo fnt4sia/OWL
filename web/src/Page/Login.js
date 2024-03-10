@@ -3,23 +3,23 @@ import githubIcon from '../Assets/github.png'
 
 export default function LoginPage(){
     return(
-        <div className="h-screen p-4 bg-main">
-           <div className="flex flex-col gap-1 justify-center h-full">
+        <div className="py-12 px-4 bg-main h-screen">
+           <div className="flex flex-col gap-1 justify-center">
                 <div>
-                    <span className="text-xl font-semibold">Masuk ke</span>
-                    <span className="text-xl font-bold"> OWL.</span>
+                    <span className="text-2xl font-semibold">Masuk ke</span>
+                    <span className="text-2xl font-bold"> OWL.</span>
                 </div>
-                <p className="text-sm">Silahkan masukkan informasi akun kamu.</p>
-                <div className="flex flex-col gap-2 mt-4">
-                    <input type="text" className="border-gray-400 border rounded-md py-1 px-3 placeholder-black placeholder-opacity-80" placeholder="Email"/>
-                    <input type="password" className="border-gray-400 border rounded-md py-1 px-3 placeholder-black placeholder-opacity-80" placeholder="Password"/>
+                <p className="text-base">Silahkan masukkan informasi akun kamu.</p>
+                <div className="flex flex-col gap-4 mt-4">
+                    <input type="text" className="border-gray-400 border rounded-md py-1 px-3 placeholder-black placeholder-opacity-70" placeholder="Email"/>
+                    <input type="password" className="border-gray-400 border rounded-md py-1 px-3 placeholder-black placeholder-opacity-70" placeholder="Password"/>
                     <div className="flex">
                         <input type="checkbox"/>
-                        <p className="text-xs">&nbsp;Remember Me</p>
+                        <p className="text-sm">&nbsp;Remember Me</p>
                     </div>
                 </div>
                 <button className="bg-orange-400 p-1 rounded-md font-light mt-2">Login</button>
-                <hr className="my-2"/>
+                <hr className="my-4"/>
                 <button className="text-blue font-light p-1 border border-blue-300 rounded-lg bg-white text-blue-300 flex justify-center items-center gap-2">
                     <img src={googleIcon} width={20} height={20}/>
                     Login With Google
