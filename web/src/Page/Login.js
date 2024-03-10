@@ -2,9 +2,6 @@ import googleIcon from '../Assets/google.png'
 import githubIcon from '../Assets/github.png'
 import image from '../Assets/image.png'
 import { useState } from 'react'
-import { createClient } from '@supabase/supabase-js'
-
-const supabase = createClient('https://gkrzpruurzsarotxqmbc.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdrcnpwcnV1cnpzYXJvdHhxbWJjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDk3MzMyNzksImV4cCI6MjAyNTMwOTI3OX0.1eijySnMEii0ybP3uN62CY_RC0SSxyiTBarOtCtU4m0')
 
 export default function LoginPage(){
 
@@ -19,12 +16,12 @@ export default function LoginPage(){
     }
 
     const sendData = async () => {
-        fetch('http://localhost:3000/login', {
+        fetch('https://nodejsdeployowl.et.r.appspot.com/login', {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({
-                'email': 'seviko.attalarik@gmail.com',
-                'password': '12345678',
+                'email': email,
+                'password': password,
             }),
             redirect: 'follow',
             credentials: 'include',
@@ -35,16 +32,10 @@ export default function LoginPage(){
         ).catch((err) => console.log(err))
     }
 
-    const getData = async () => {
-        fetch('https://nodejsdeployowl.et.r.appspot.com/')
-        .then((res) => res.json())
-        .then((res) => console.log(res))
-    }
-
     return(
         <div className="py-12 px-4 lg:py-20 lg:px-8 bg-main h-screen md:flex md:justify-center md:items-center ">
             <div className='hidden md:block'>
-                <img src={image} alt='test' className='md:max-w-sm lg:max-w-md'/>
+                <img src={image} alt='test' className='md:max-w-sm lg:max-w-md lg:max-h-full'/>
             </div>
            <div className="flex flex-col gap-1 lg:gap-2 justify-center md:justify-start w-full md:w-1/2 ">
                 <div>
