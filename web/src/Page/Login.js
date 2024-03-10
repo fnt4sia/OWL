@@ -1,12 +1,50 @@
 import googleIcon from '../Assets/google.png'
 import githubIcon from '../Assets/github.png'
 import image from '../Assets/image.png'
+import { useState } from 'react'
+import { createClient } from '@supabase/supabase-js'
+
+const supabase = createClient('https://gkrzpruurzsarotxqmbc.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdrcnpwcnV1cnpzYXJvdHhxbWJjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDk3MzMyNzksImV4cCI6MjAyNTMwOTI3OX0.1eijySnMEii0ybP3uN62CY_RC0SSxyiTBarOtCtU4m0')
 
 export default function LoginPage(){
+
+    const[email, setemail] = useState('');
+    const[password, setPassword] = useState('');
+
+    const onChangeemail = (e) => {
+        setemail(e.target.value)
+    } 
+    const onChangePassword = (e) => {
+        setPassword(e.target.value)
+    }
+
+    const sendData = async () => {
+        fetch('http://localhost:3000/login', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+                'email': 'seviko.attalarik@gmail.com',
+                'password': '12345678',
+            }),
+            redirect: 'follow',
+            credentials: 'include',
+        }).then((response) => 
+            response.text()
+        ).then((result) =>
+            console.log(result)
+        ).catch((err) => console.log(err))
+    }
+
+    const getData = async () => {
+        fetch('https://nodejsdeployowl.et.r.appspot.com/')
+        .then((res) => res.json())
+        .then((res) => console.log(res))
+    }
+
     return(
         <div className="py-12 px-4 lg:py-20 lg:px-8 bg-main h-screen md:flex md:justify-center md:items-center ">
             <div className='hidden md:block'>
-                <img src={image} className='md:max-w-sm lg:max-w-md'/>
+                <img src={image} alt='test' className='md:max-w-sm lg:max-w-md'/>
             </div>
            <div className="flex flex-col gap-1 lg:gap-2 justify-center md:justify-start w-full md:w-1/2 ">
                 <div>
@@ -15,21 +53,21 @@ export default function LoginPage(){
                 </div>
                 <p className="text-base lg:text-lg ">Silahkan masukkan informasi akun kamu.</p>
                 <div className="flex flex-col gap-4 mt-4">
-                    <input type="text" className="border-gray-400 border rounded-md py-1 lg:py-2 px-3 placeholder-black placeholder-opacity-70" placeholder="Email"/>
-                    <input type="password" className="border-gray-400 border rounded-md py-1 lg:py-2 px-3 placeholder-black placeholder-opacity-70" placeholder="Password"/>
+                    <input type="text" value={email} onChange={onChangeemail} className="border-gray-400 border rounded-md py-1 lg:py-2 px-3 placeholder-black placeholder-opacity-70" placeholder="Email"/>
+                    <input type="password" password={password} onChange={onChangePassword} className="border-gray-400 border rounded-md py-1 lg:py-2 px-3 placeholder-black placeholder-opacity-70" placeholder="Password"/>
                     <div className="flex">
                         <input type="checkbox"/>
                         <p className="text-sm">&nbsp;Remember Me</p>
                     </div>
                 </div>
-                <button className="bg-orange-400 p-1 rounded-md font-light mt-2 lg:mt-4 lg:text-lg">Login</button>
+                <button onClick={sendData} className="bg-orange-400 p-1 rounded-md font-light mt-2 lg:mt-4 lg:text-lg">Login</button>
                 <hr className="my-4"/>
                 <button className="text-blue font-light p-1 lg:p-2 border border-blue-300 rounded-lg bg-white text-blue-300 flex justify-center items-center gap-2">
-                    <img src={googleIcon} width={20} height={20}/>
+                    <img alt='gugel'src={googleIcon} width={20} height={20}/>
                     Login With Google
                 </button>
                 <button className="text-blue font-light p-1 lg:p-2 border border-blue-300 rounded-lg mt-2 bg-white text-blue-300 flex justify-center items-center gap-2">
-                    <img src={githubIcon} width={20} height={20}/>Login With Github
+                    <img alt='github' src={githubIcon} width={20} height={20}/>Login With Github
                 </button>
                 
                 <div className="text-center text-sm mt-2">

@@ -54,8 +54,8 @@ const loginEmail = async (req, res, next) => {
                 "expires_at": data.session.expires_at,
                 "refresh_token": data.session.refresh_token,
             }
-
-            res.cookie('session', session, { httpOnly: false, secure: dev ? false : true })
+            
+            res.cookie('session', session, { httpOnly: false, path:'/', secure: dev ? false : true })
             res.status(200).json({
                 message: 'User logged in successfully!',
                 email: req.body.email
@@ -63,8 +63,9 @@ const loginEmail = async (req, res, next) => {
         }
 
     } catch (error) {
+
         res.status(500).json({
-            message: error.message
+            message: req.body.email + ' ' + error.message
         });
     }
 }
