@@ -43,7 +43,7 @@ const loginEmail = async (req, res, next) => {
         
         if (error) {
             res.status(401).json({
-                message: 'Invalid login credentials'
+                message: req.body.email + ' ' + error.message
             });
             return;
         } else if (data) {
