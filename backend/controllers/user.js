@@ -1,7 +1,8 @@
 const supabase = require('../util/con_db');
 const jwt = require('jsonwebtoken');
 
-dev = true;
+dev = false;
+key = process.env.JWTKEY;
 
 const getSession = (req) => {
     const cookie = req.headers.cookie.split(';');
@@ -41,8 +42,10 @@ const loginEmail = async (req, res, next) => {
         });
         
         if (error) {
-            throw new Error(error.message);
-
+            res.status(401).json({
+                message: 'Invalid login credentials'
+            });
+            return;
         } else if (data) {
             const session = {
                 "access_token": data.session.access_token,
@@ -52,7 +55,7 @@ const loginEmail = async (req, res, next) => {
                 "refresh_token": data.session.refresh_token,
             }
 
-            res.cookie('session', session, { httpOnly: true, secure: dev ? false : true })
+            res.cookie('session', session, { httpOnly: false, secure: dev ? false : true })
             res.status(200).json({
                 message: 'User logged in successfully!',
                 email: req.body.email
@@ -117,7 +120,7 @@ const deleteUser = async (req, res, next) => {
             throw new Error(error.message);
         }
         
-        const user = jwt.decode(access_token, process.env.JWTKEY);
+        const user = jwt.decode(access_token, key);
         const { error: errorDelete } = await supabase.auth.admin.deleteUser(user.sub);
 
         if (errorDelete) {
