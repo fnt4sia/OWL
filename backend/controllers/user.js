@@ -20,10 +20,7 @@ const oauth = async (req, res, next) => {
         });
 
         if (error) {
-            res.status(500).json({
-                message: error.message
-            });
-            return;
+            throw new Error(error.message);
         } else if (data) {
             res.status(200).redirect(data.url);
         }
@@ -44,10 +41,8 @@ const loginEmail = async (req, res, next) => {
         });
         
         if (error) {
-            res.status(500).json({
-                message: error.message
-            });
-            return;
+            throw new Error(error.message);
+
         } else if (data) {
             const session = {
                 "access_token": data.session.access_token,
@@ -56,6 +51,7 @@ const loginEmail = async (req, res, next) => {
                 "expires_at": data.session.expires_at,
                 "refresh_token": data.session.refresh_token,
             }
+
             res.cookie('session', session, { httpOnly: true, secure: dev ? false : true })
             res.status(200).json({
                 message: 'User logged in successfully!',
@@ -97,11 +93,11 @@ const registerEmail = async (req, res, next) => {
 
         if (errorSignup) {
             throw new Error(error.message);
-        } else {
-            res.status(201).json({
-                message: 'User created successfully!'
-            });
         }
+
+        res.status(201).json({
+            message: 'User created successfully!'
+        });
 
     } catch (error) {
         res.status(500).json({
@@ -119,19 +115,19 @@ const deleteUser = async (req, res, next) => {
 
         if (error) {
             throw new Error(error.message);
-        } else {
-            const user = jwt.decode(access_token, process.env.JWTKEY);
-            const { error: errorDelete } = await supabase.auth.admin.deleteUser(user.sub);
-
-            if (errorDelete) {
-                throw new Error(errorDelete.message);
-            }
-
-            res.clearCookie('session');
-            res.status(200).json({
-                message: 'User deleted successfully!'
-            });
         }
+        
+        const user = jwt.decode(access_token, process.env.JWTKEY);
+        const { error: errorDelete } = await supabase.auth.admin.deleteUser(user.sub);
+
+        if (errorDelete) {
+            throw new Error(errorDelete.message);
+        }
+
+        res.clearCookie('session');
+        res.status(200).json({
+            message: 'User deleted successfully!'
+        });
 
     } catch (error) {
         res.status(500).json({
@@ -156,13 +152,15 @@ const recoverAccount = async (req, res, next) => {
         const { error } = await supabase.auth.resetPasswordForEmail(req.body.email, {
             redirectTo: 'http://localhost:3000/recover-password'
         });
+
         if (error) {
             throw new Error(error.message);
-        } else {
-            res.status(200).json({
-                message: 'Password Recovery already sent to your email!'
-            });
-        }
+        } 
+
+        res.status(200).json({
+            message: 'Password Recovery already sent to your email!'
+        });
+
     } catch(error) {
         res.status(500).json({
             message: error.message
@@ -186,11 +184,12 @@ const recoverPassword = async (req, res, next) => {
 
         if (error) {
             throw new Error(error.message);
-        } else {
-            res.status(200).json({
-                message: 'Password is changed!'
-            });
         }
+
+        res.status(200).json({
+            message: 'Password is changed!'
+        });
+        
     } catch (error){
         res.status(500).json({
             message: error.message
