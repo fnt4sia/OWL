@@ -1,9 +1,16 @@
 const supabase = require('../util/con_db');
+const jwt = require('jsonwebtoken');
 
 dev = true;
 
-const getUserID = (req) => req.headers.cookie.split(';').find(c => c.trim().startsWith('id=')).split('=')[1];
-const getUserSession = (req) => req.headers.cookie.split(';').find(c => c.trim().startsWith('session=')).split('=')[1];
+const getSession = (req) => {
+    const cookie = req.headers.cookie.split(';');
+    const sessionCookie = cookie.find(c => c.trim().startsWith('session='));
+    const encodedSession = sessionCookie.split('=')[1];
+    const decodedString = decodeURIComponent(encodedSession);
+    const sessionObject = JSON.parse(decodedString.substring(2));
+    return sessionObject;
+}
 
 /////////////////////////////////////////////////////oauth/////////////////////////////////////////////////////
 const oauth = async (req, res, next) => {
@@ -50,7 +57,6 @@ const loginEmail = async (req, res, next) => {
                 "refresh_token": data.session.refresh_token,
             }
             res.cookie('session', session, { httpOnly: true, secure: dev ? false : true })
-            res.cookie('id', data.user.id, { httpOnly: true, secure: dev ? false : true })
             res.status(200).json({
                 message: 'User logged in successfully!',
                 email: req.body.email
@@ -92,7 +98,6 @@ const registerEmail = async (req, res, next) => {
         if (errorSignup) {
             throw new Error(error.message);
         } else {
-            res.cookie('id', data.user.id, { httpOnly: true, secure: dev ? false : true })
             res.status(201).json({
                 message: 'User created successfully!'
             });
@@ -109,14 +114,19 @@ const registerEmail = async (req, res, next) => {
 /////////////////////////////////////////////////////delete user/////////////////////////////////////////////////////z
 const deleteUser = async (req, res, next) => {
     try {
-        id = await getUserID(req);
-
-        const { error } = await supabase.auth.admin.deleteUser(id); 
+        const access_token = getSession(req).access_token;
+        const { data, error } = await supabase.auth.getSession(access_token);
 
         if (error) {
             throw new Error(error.message);
         } else {
-            res.clearCookie('id');
+            const user = jwt.decode(access_token, process.env.JWTKEY);
+            const { error: errorDelete } = await supabase.auth.admin.deleteUser(user.sub);
+
+            if (errorDelete) {
+                throw new Error(errorDelete.message);
+            }
+
             res.clearCookie('session');
             res.status(200).json({
                 message: 'User deleted successfully!'
@@ -163,7 +173,8 @@ const recoverAccount = async (req, res, next) => {
 /////////////////////////////////////////////////////recover password/////////////////////////////////////////////////////
 const recoverPassword = async (req, res, next) => {
     try {
-        const { error: checks } = await supabase.auth.getSession(getUserSession(req));
+        const access_token = getSession(req).access_token;
+        const { error: checks } = await supabase.auth.getSession(access_token);
 
         if (checks) {
             throw new Error(error.message);
