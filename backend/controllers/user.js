@@ -43,10 +43,7 @@ const loginEmail = async (req, res, next) => {
     try {
         const { data, error } = await supabase.auth.signInWithPassword({
             email: req.body.email,
-            password: req.body.password,
-            options: {
-                redirectTo: 'https://www.owlearns.site/home'
-            }
+            password: req.body.password
         });
         
         if (error) {
