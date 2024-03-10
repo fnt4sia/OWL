@@ -2,7 +2,10 @@ const express = require('express');
 const cors = require('cors');
 const userRoute = require('./routes/user_route');
 
-const app = express();
+const app = express({
+    credentials: true,
+    exposedHeaders: ['set-cookie']
+});
 
 app.use(cors());
 

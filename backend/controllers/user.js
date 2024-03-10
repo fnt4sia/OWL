@@ -43,7 +43,7 @@ const loginEmail = async (req, res, next) => {
         
         if (error) {
             res.status(401).json({
-                message: req.body.email + ' ' + error.message
+                message: 'Invalid login credentials'
             });
             return;
         } else if (data) {
@@ -55,7 +55,7 @@ const loginEmail = async (req, res, next) => {
                 "refresh_token": data.session.refresh_token,
             }
 
-            res.cookie('session', session, { httpOnly: false, secure: dev ? false : true })
+            res.cookie('session', session, { httpOnly: false, path:"/", secure: dev ? false : true })
             res.status(200).json({
                 message: 'User logged in successfully!',
                 email: req.body.email
