@@ -39,7 +39,7 @@ export default function LoginPage(){
             credentials: 'include'
           };
           
-          fetch("https://nodejsdeployowl.et.r.appspot.com/oauth/" + provider, requestOptions)
+          fetch("https://nodejsdeployowl.et.r.appspot.com/oauth/google", requestOptions)
             .then((response) => response.text())
             .then((result) => console.log(result))
             .catch((error) => console.error(error));
