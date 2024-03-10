@@ -2,15 +2,12 @@ const express = require('express');
 const cors = require('cors');
 const userRoute = require('./routes/user_route');
 
-const app = express({
-    exposedHeaders: ['set-cookie']
-});
+const app = express();
 
-app.set('trust proxy', 1);
 
 app.use(cors({
-    origin: 'http://localhost:3001', // specify the origin
-    credentials: true  // set credentials to true
+    origin: 'https://www.owlearns.site/',
+    credentials: true
 }));
 
 app.use(express.json());
