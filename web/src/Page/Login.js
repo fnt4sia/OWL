@@ -2,7 +2,7 @@ import googleIcon from '../Assets/google.png'
 import githubIcon from '../Assets/github.png'
 import image from '../Assets/image.png'
 import { useState } from 'react'
-    
+
 export default function LoginPage(){
 
     const[email, setemail] = useState('');
@@ -35,7 +35,7 @@ export default function LoginPage(){
     return(
         <div className="py-12 px-4 lg:py-20 lg:px-8 bg-main h-screen md:flex md:justify-center md:items-center ">
             <div className='hidden md:block'>
-                <img src={image} alt='test' className='md:max-w-sm lg:max-w-md'/>
+                <img src={image} alt='test' className='md:max-w-sm lg:max-w-md lg:max-h-full'/>
             </div>
            <div className="flex flex-col gap-1 lg:gap-2 justify-center md:justify-start w-full md:w-1/2 ">
                 <div>
