@@ -2,7 +2,11 @@ const express = require('express');
 const cors = require('cors');
 const userRoute = require('./routes/user_route');
 
-const app = express();
+const app = express({
+    exposedHeaders: ['set-cookie']
+});
+
+app.set('trust proxy', 1);
 
 app.use(cors({
     origin: 'http://localhost:3001', // specify the origin
