@@ -33,16 +33,19 @@ export default function LoginPage(){
     }
 
     const oauth = async (provider) => {
-        fetch('https://nodejsdeployowl.et.r.appspot.com/oauth/google', {
+        fetch(`https://nodejsdeployowl.et.r.appspot.com/oauth/${provider}`, {
             method: 'POST',
             headers: {"Content-Type": "application/json"},
             redirect: 'follow',
             credentials: 'include'
         }).then((response) => 
-            response.text()
-        ).then((result) =>
-            console.log(result)
-        ).catch((err) => console.log(err))
+            response.json()
+        ).then((result) => {
+            console.log(result);
+            if (result.url) {
+                window.location.href = result.url;
+            }
+        }).catch((err) => console.log(err))
     }
 
     return(
