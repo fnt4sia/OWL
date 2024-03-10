@@ -2,8 +2,9 @@ const express = require('express');
 const cors = require('cors');
 const userRoute = require('./routes/user_route');
 
+app.set('trust proxy', 1);
+
 const app = express({
-    credentials: true,
     exposedHeaders: ['set-cookie']
 });
 
