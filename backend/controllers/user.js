@@ -4,15 +4,6 @@ const jwt = require('jsonwebtoken');
 dev = false;
 key = process.env.JWTKEY;
 
-const getSession = (req) => {
-    const cookie = req.headers.cookie.split(';');
-    const sessionCookie = cookie.find(c => c.trim().startsWith('session='));
-    const encodedSession = sessionCookie.split('=')[1];
-    const decodedString = decodeURIComponent(encodedSession);
-    const sessionObject = JSON.parse(decodedString.substring(2));
-    return sessionObject;
-}
-
 /////////////////////////////////////////////////////oauth/////////////////////////////////////////////////////
 const oauth = async (req, res, next) => {
     try {
@@ -59,8 +50,9 @@ const loginEmail = async (req, res, next) => {
                 "expires_at": data.session.expires_at,
                 "refresh_token": data.session.refresh_token,
             }
-
-            res.cookie('session', session, { httpOnly: false, secure: dev ? false : true })
+            
+            const SEVENDAYS = 7 * 24 * 60 * 60 * 1000;
+            res.cookie('session', session, { maxAge: SEVENDAYS, httpOnly: dev ? false : true, secure: dev ? false : true });
             res.status(200).json({
                 message: 'User logged in successfully!',
                 email: req.body.email
@@ -119,7 +111,7 @@ const registerEmail = async (req, res, next) => {
 /////////////////////////////////////////////////////delete user/////////////////////////////////////////////////////z
 const deleteUser = async (req, res, next) => {
     try {
-        const access_token = getSession(req).access_token;
+        const access_token = req.cookies.session.access_token;
         const { data, error } = await supabase.auth.getSession(access_token);
 
         if (error) {
@@ -180,7 +172,7 @@ const recoverAccount = async (req, res, next) => {
 /////////////////////////////////////////////////////recover password/////////////////////////////////////////////////////
 const recoverPassword = async (req, res, next) => {
     try {
-        const access_token = getSession(req).access_token;
+        const access_token = req.cookies.session.access_token;
         const { error: checks } = await supabase.auth.getSession(access_token);
 
         if (checks) {
