@@ -1,55 +1,19 @@
-import googleIcon from '../Assets/google.png'
-import githubIcon from '../Assets/github.png'
-import image from '../Assets/image.png'
+import googleIcon from '../../Assets/google.png'
+import githubIcon from '../../Assets/github.png'
+import image from '../../Assets/image.png'
 import { useState } from 'react'
+import {sendData, oauth} from './LoginModel'
 
 export default function LoginPage(){
 
-    const[email, setemail] = useState('');
+    const[email, setEmail] = useState('');
     const[password, setPassword] = useState('');
 
-    const onChangeemail = (e) => {
-        setemail(e.target.value)
+    const onChangeEmail = (e) => {
+        setEmail(e.target.value)
     } 
     const onChangePassword = (e) => {
         setPassword(e.target.value)
-    }
-
-    const sendData = async () => {
-        fetch('https://nodejsdeployowl.et.r.appspot.com/login', {
-            method: 'POST',
-            headers: {"Content-Type": "application/json"},
-            body: JSON.stringify({
-                'email': email,
-                'password': password
-            }),
-            redirect: 'follow',
-            credentials: 'same-origin'
-        }).then((response) =>
-            response.text()
-        ).then((result) =>{
-            const res = JSON.parse(result);
-            const session = JSON.stringify(res.session)
-            localStorage.setItem('session', session)
-            window.location.href = '/home'
-        }
-        ).catch((err) => console.log(err))
-    }
-
-    const oauth = async (provider) => {
-        fetch(`https://nodejsdeployowl.et.r.appspot.com/oauth/${provider}`, {
-            method: 'POST',
-            headers: {"Content-Type": "application/json"},
-            redirect: 'follow',
-            credentials: 'include'
-        }).then((response) => 
-            response.json()
-        ).then((result) => {
-            console.log(result);
-            if (result.url) {
-                window.location.href = result.url;
-            }
-        }).catch((err) => console.log(err))
     }
 
     return(
@@ -64,14 +28,14 @@ export default function LoginPage(){
                 </div>
                 <p className="text-base lg:text-lg ">Silahkan masukkan informasi akun kamu.</p>
                 <div className="flex flex-col gap-4 mt-4">
-                    <input type="text" value={email} onChange={onChangeemail} className="border-gray-400 border rounded-md py-1 lg:py-2 px-3 placeholder-black placeholder-opacity-70" placeholder="Email"/>
+                    <input type="text" value={email} onChange={onChangeEmail} className="border-gray-400 border rounded-md py-1 lg:py-2 px-3 placeholder-black placeholder-opacity-70" placeholder="Email"/>
                     <input type="password" password={password} onChange={onChangePassword} className="border-gray-400 border rounded-md py-1 lg:py-2 px-3 placeholder-black placeholder-opacity-70" placeholder="Password"/>
                     <div className="flex">
                         <input type="checkbox"/>
                         <p className="text-sm">&nbsp;Remember Me</p>
                     </div>
                 </div>
-                <button onClick={sendData} className="bg-orange-400 p-1 rounded-md font-light mt-2 lg:mt-4 lg:text-lg">Login</button>
+                <button onClick={() => sendData(email, password)} className="bg-orange-400 p-1 rounded-md font-light mt-2 lg:mt-4 lg:text-lg">Login</button>
                 <hr className="my-4"/>
                 <button 
                     className="text-blue font-light p-1 lg:p-2 border border-blue-300 rounded-lg bg-white text-blue-300 flex justify-center items-center gap-2" 

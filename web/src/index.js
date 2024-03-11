@@ -5,16 +5,16 @@ import {
   createBrowserRouter,
   RouterProvider,
 } from "react-router-dom";
-import LoginPage from './Page/Login';
-import TestPage from './Page/Test';
+import LoginPage from './Features/Login/LoginPage';
+import TestPage from './Features/Home/Test';
 
 const router = createBrowserRouter([
   {
-    path: "/login",
+    path: "/",
     element: <LoginPage/>,
   },
   {
-    path: "/",
+    path: "/login",
     element: <TestPage/>
   }
 ]);
