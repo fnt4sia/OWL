@@ -9,14 +9,9 @@ body {
   font-style: normal;
 }
 
-
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
-}
-
-.bg-main {
-  background-color: #EEF9FD;
 }
 
 @tailwind base;

@@ -17,7 +17,7 @@ export default function LoginPage(){
     }
 
     return(
-        <div className="py-12 px-4 lg:py-20 lg:px-8 bg-main h-screen md:flex md:justify-center md:items-center ">
+        <div className="py-12 px-4 lg:py-20 lg:px-8 bg-OWL-base h-screen md:flex md:justify-center md:items-center ">
             <div className='hidden md:block'>
                 <img src={image} alt='test' className='md:max-w-sm lg:max-w-md lg:max-h-full'/>
             </div>
