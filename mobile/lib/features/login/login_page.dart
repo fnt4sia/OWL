@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'login_model.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -8,8 +9,23 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final TextEditingController usernameController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+
+  String errorText = '';
+
+  void handleLogin() {
+    LoginModel.loginEmail(emailController.text, passwordController.text)
+        .then((value) {
+      if (value) {
+        Navigator.of(context).pushReplacementNamed('/home');
+      } else {
+        setState(() {
+          errorText = 'Incorrect Credentials Information';
+        });
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -48,33 +64,51 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ),
               const SizedBox(height: 30),
-              inputForm(false, usernameController, 'Email'),
+              inputForm(false, emailController, 'Email'),
               const SizedBox(height: 15),
               inputForm(true, passwordController, 'Password'),
-              const SizedBox(height: 10),
+              const SizedBox(height: 5),
+              errorText.isNotEmpty
+                  ? const Text(
+                      'Wrong Credentials Information',
+                      style: TextStyle(
+                        color: Colors.red,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w400,
+                      ),
+                      textAlign: TextAlign.center,
+                    )
+                  : const SizedBox(),
+              const SizedBox(height: 5),
               const Text(
                 'Forgot Password ?',
                 style: TextStyle(
                   fontWeight: FontWeight.w300,
                   color: Colors.blue,
                 ),
+                textAlign: TextAlign.center,
               ),
-              const SizedBox(height: 20),
-              Container(
-                width: MediaQuery.of(context).size.width,
-                padding: const EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                  color: Colors.orange,
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: const Text(
-                  'Login',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 14,
-                    fontWeight: FontWeight.w400,
+              const SizedBox(height: 10),
+              InkWell(
+                onTap: () {
+                  handleLogin();
+                },
+                child: Container(
+                  width: MediaQuery.of(context).size.width,
+                  padding: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    color: Colors.orange,
+                    borderRadius: BorderRadius.circular(12),
                   ),
-                  textAlign: TextAlign.center,
+                  child: const Text(
+                    'Login',
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w400,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
                 ),
               ),
               const SizedBox(height: 20),
