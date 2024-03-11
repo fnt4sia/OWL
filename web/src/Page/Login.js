@@ -22,6 +22,7 @@ export default function LoginPage(){
             body: JSON.stringify({
                 'email': email,
                 'password': password,
+                'useCookie': 'true'
             }),
             redirect: 'follow',
             credentials: 'same-origin'

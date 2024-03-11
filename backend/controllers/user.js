@@ -15,7 +15,10 @@ const oauth = async (req, res, next) => {
         });
 
         if (error) {
-            throw new Error(error.message);
+            res.status(401).json({
+                message: 'Invalid login credentials'
+            });
+
         } else if (data) {
             res.status(200).json({
                 url: data.url
@@ -32,9 +35,10 @@ const oauth = async (req, res, next) => {
 /////////////////////////////////////////////////////login with email/////////////////////////////////////////////////////
 const loginEmail = async (req, res, next) => {
     try {
+        const { email, password, useCookie } = req.body;
         const { data, error } = await supabase.auth.signInWithPassword({
-            email: req.body.email,
-            password: req.body.password
+            email: email,
+            password: password
         });
         
         if (error) {
@@ -42,6 +46,7 @@ const loginEmail = async (req, res, next) => {
                 message: 'Invalid login credentials'
             });
             return;
+
         } else if (data) {
             const session = {
                 "access_token": data.session.access_token,
@@ -52,23 +57,25 @@ const loginEmail = async (req, res, next) => {
             }
             
             const SEVENDAYS = 7 * 24 * 60 * 60 * 1000;
-            res.cookie('session', session, { 
-                maxAge: SEVENDAYS,
-                httpOnly: dev ? false : true,
-                secure: dev ? false : true,
-                sameSite: 'none'
-            });
+            if (useCookie == 'true') {
+                res.cookie('session', session, { 
+                    maxAge: SEVENDAYS,
+                    httpOnly: dev ? false : true,
+                    secure: dev ? false : true,
+                    sameSite: 'none'
+                });
+            }
             
             res.status(200).json({
                 message: 'User logged in successfully!',
-                email: req.body.email
+                email: email
             });
         }
 
     } catch (error) {
 
         res.status(500).json({
-            message: req.body.email + ' ' + error.message
+            message: error.message
         });
     }
 }
@@ -76,21 +83,26 @@ const loginEmail = async (req, res, next) => {
 /////////////////////////////////////////////////////register with email/////////////////////////////////////////////////////
 const registerEmail = async (req, res, next) => {
     try {
+        const { email, password } = req.body;
+
         //check if email already exists
-        const { data: users, error } = await supabase.from('profiles').select('email').eq('email', req.body.email);
+        const { data: users, error } = await supabase.from('profiles').select('email').eq('email', email);
         
         if (error) {
             throw error;
         }
 
         if (users.length > 0) {
-            throw new Error("user already exists!");
+            res.status(400).json({
+                message: 'Email already exists!'
+            });
+            return;
         }
 
-        const username = req.body.email.split('@')[0];
+        const username = email.split('@')[0];
         const { data, error: errorSignup } = await supabase.auth.signUp({
-            email: req.body.email,
-            password: req.body.password,
+            email: email,
+            password: password,
             options: {
                 data: {
                     name: username
@@ -146,14 +158,18 @@ const deleteUser = async (req, res, next) => {
 /////////////////////////////////////////////////////recover account/////////////////////////////////////////////////////
 const recoverAccount = async (req, res, next) => {
     try {
-        const { data: users, error: checks } = await supabase.from('profiles').select('email').eq('email', req.body.email);
+        email = req.body.email;
+        const { data: users, error: checks } = await supabase.from('profiles').select('email').eq('email', email);
         
         if (checks) {
             throw error;
         }
 
         if (users.length == 0) {
-            throw new Error("user doesnt exists!");
+            res.status(400).json({
+                message: 'Email does not exist!'
+            });
+            return;
         }
 
         const { error } = await supabase.auth.resetPasswordForEmail(req.body.email, {
@@ -182,7 +198,10 @@ const recoverPassword = async (req, res, next) => {
         const { error: checks } = await supabase.auth.getSession(access_token);
 
         if (checks) {
-            throw new Error(error.message);
+            res.status(401).json({
+                message: 'Unauthorized access!'
+            });
+            return;
         }
 
         const { error } = await supabase.auth.updateUser({
