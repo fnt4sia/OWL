@@ -22,9 +22,10 @@ export default function LoginPage(){
             body: JSON.stringify({
                 'email': email,
                 'password': password,
+                'useCookie': 'true'
             }),
             redirect: 'follow',
-            credentials: 'include'
+            credentials: 'same-origin'
         }).then((response) => 
             response.text()
         ).then((result) =>
