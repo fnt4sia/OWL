@@ -52,7 +52,13 @@ const loginEmail = async (req, res, next) => {
             }
             
             const SEVENDAYS = 7 * 24 * 60 * 60 * 1000;
-            res.cookie('session', session, { maxAge: SEVENDAYS, httpOnly: dev ? false : true, secure: dev ? false : true });
+            res.cookie('session', session, { 
+                maxAge: SEVENDAYS,
+                httpOnly: dev ? false : true,
+                secure: dev ? false : true,
+                sameSite: 'none'
+            });
+            
             res.status(200).json({
                 message: 'User logged in successfully!',
                 email: req.body.email

@@ -24,7 +24,7 @@ export default function LoginPage(){
                 'password': password,
             }),
             redirect: 'follow',
-            credentials: 'include'
+            credentials: 'same-origin'
         }).then((response) => 
             response.text()
         ).then((result) =>
