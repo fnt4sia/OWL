@@ -6,12 +6,17 @@ import {
   RouterProvider,
 } from "react-router-dom";
 import LoginPage from './Page/Login';
+import TestPage from './Page/Test';
 
 const router = createBrowserRouter([
   {
-    path: "/",
+    path: "/login",
     element: <LoginPage/>,
   },
+  {
+    path: "/",
+    element: <TestPage/>
+  }
 ]);
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
