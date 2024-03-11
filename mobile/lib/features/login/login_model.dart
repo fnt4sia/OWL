@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:http/http.dart' as http;
 
 class LoginModel {
@@ -16,10 +15,10 @@ class LoginModel {
       ),
     );
 
-    if (loginResponse.statusCode != 200) {
-      return false;
-    } else {
+    if (loginResponse.statusCode == 200) {
       return true;
+    } else {
+      return false;
     }
   }
 }
