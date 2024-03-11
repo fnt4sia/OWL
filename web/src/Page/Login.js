@@ -21,15 +21,18 @@ export default function LoginPage(){
             headers: {"Content-Type": "application/json"},
             body: JSON.stringify({
                 'email': email,
-                'password': password,
-                'useCookie': 'true'
+                'password': password
             }),
             redirect: 'follow',
             credentials: 'same-origin'
-        }).then((response) => 
+        }).then((response) =>
             response.text()
-        ).then((result) =>
-            console.log(result)
+        ).then((result) =>{
+            const res = JSON.parse(result);
+            const session = JSON.stringify(res.session)
+            localStorage.setItem('session', session)
+            window.location.href = '/home'
+        }
         ).catch((err) => console.log(err))
     }
 
