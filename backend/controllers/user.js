@@ -35,7 +35,7 @@ const oauth = async (req, res, next) => {
 /////////////////////////////////////////////////////login with email/////////////////////////////////////////////////////
 const loginEmail = async (req, res, next) => {
     try {
-        const { email, password, useCookie } = req.body;
+        const { email, password } = req.body;
         const { data, error } = await supabase.auth.signInWithPassword({
             email: email,
             password: password
@@ -57,18 +57,10 @@ const loginEmail = async (req, res, next) => {
             }
             
             const SEVENDAYS = 7 * 24 * 60 * 60 * 1000;
-            if (useCookie == 'true') {
-                res.cookie('session', session, { 
-                    maxAge: SEVENDAYS,
-                    httpOnly: dev ? false : true,
-                    secure: dev ? false : true,
-                    sameSite: 'none'
-                });
-            }
             
             res.status(200).json({
                 message: 'User logged in successfully!',
-                email: email
+                session: session
             });
         }
 
@@ -129,7 +121,7 @@ const registerEmail = async (req, res, next) => {
 /////////////////////////////////////////////////////delete user/////////////////////////////////////////////////////z
 const deleteUser = async (req, res, next) => {
     try {
-        const access_token = req.cookies.session.access_token;
+        const access_token = req.body.access_token;
         const { data, error } = await supabase.auth.getSession(access_token);
 
         if (error) {
@@ -143,7 +135,6 @@ const deleteUser = async (req, res, next) => {
             throw new Error(errorDelete.message);
         }
 
-        res.clearCookie('session');
         res.status(200).json({
             message: 'User deleted successfully!'
         });
@@ -194,7 +185,7 @@ const recoverAccount = async (req, res, next) => {
 /////////////////////////////////////////////////////recover password/////////////////////////////////////////////////////
 const recoverPassword = async (req, res, next) => {
     try {
-        const access_token = req.cookies.session.access_token;
+        const access_token = req.body.access_token;
         const { error: checks } = await supabase.auth.getSession(access_token);
 
         if (checks) {
