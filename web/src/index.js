@@ -1,4 +1,6 @@
 import React from 'react';
+import AccessAlarmIcon from '@mui/icons-material/AccessAlarm';
+import ThreeDRotation from '@mui/icons-material/ThreeDRotation';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import {
@@ -6,16 +8,16 @@ import {
   RouterProvider,
 } from "react-router-dom";
 import LoginPage from './Features/Login/LoginPage';
-import TestPage from './Features/Home/Test';
+import HomePage from './Features/Home/HomePage';
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <LoginPage/>,
+    element: <HomePage/>
   },
   {
     path: "/login",
-    element: <TestPage/>
+    element: <LoginPage/>,
   }
 ]);
 

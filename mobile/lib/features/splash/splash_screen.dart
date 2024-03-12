@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -11,8 +12,16 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(const Duration(seconds: 3), () {
-      Navigator.pushReplacementNamed(context, '/login');
+    final nav = Navigator.of(context);
+    Future.delayed(const Duration(seconds: 2), () async {
+      final SharedPreferences prefs = await SharedPreferences.getInstance();
+      final jwt = prefs.getString('jwt');
+
+      if (jwt == null) {
+        nav.pushReplacementNamed('/login');
+      } else {
+        nav.pushReplacementNamed('/home');
+      }
     });
   }
 
