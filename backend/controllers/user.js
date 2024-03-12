@@ -10,7 +10,7 @@ const oauth = async (req, res, next) => {
         const { data, error } = await supabase.auth.signInWithOAuth({
             provider: req.params.provider,
             options: {
-                redirectTo: 'https://www.owlearns.site/home'
+                redirectTo: 'https://www.owlearns.site'
             }
         });
 
