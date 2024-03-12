@@ -3,8 +3,15 @@ import Web from "../../Assets/web.png"
 import SearchBar from "../../Components/SearchBar/SearchBar"
 import Mentor from "../../Assets/mentor.png"
 import Community from "../../Assets/community.png"
+import CheckUserLoggedIn  from "../../Hooks/CheckUser"
+import { useEffect } from "react"
 
 export default function TestPage(){
+
+    useEffect(() => {
+        CheckUserLoggedIn();
+    }, [])
+
     return (
         <>
             <div className="bg-OWL-base p-6">
