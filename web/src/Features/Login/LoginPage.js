@@ -1,6 +1,6 @@
 import googleIcon from '../../Assets/google.png'
 import githubIcon from '../../Assets/github.png'
-import image from '../../Assets/image.png'
+import image from '../../Assets/login.png'
 import { useState } from 'react'
 import {sendData, oauth} from './LoginModel'
 
