@@ -11,7 +11,7 @@ module.exports = {
         'OWL-orange': '#FBA834',
         'OWL-dark-blue': '#333A73',
         'OWL-mid-blue': '#387ADF',
-        'OWL-orange': '#50C4ED',
+        'OWL-light-blue': '#50C4ED',
       },
     },
   },

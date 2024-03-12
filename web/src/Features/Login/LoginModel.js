@@ -14,7 +14,7 @@ const sendData = async (email, password) => {
         const res = JSON.parse(result);
         const session = JSON.stringify(res.session)
         localStorage.setItem('session', session)
-        window.location.href = '/home'
+        window.location.href = '/'
     }
     ).catch((err) => console.log(err))
 }
