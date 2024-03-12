@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/shared/themes/login_theme.dart';
 import 'login_model.dart';
 
 class LoginPage extends StatefulWidget {
@@ -32,9 +33,11 @@ class _LoginPageState extends State<LoginPage> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: SafeArea(
-        child: Padding(
+          child: LoginTheme(
+        main: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 40),
-          child: ListView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               const Row(
                 children: [
@@ -128,7 +131,7 @@ class _LoginPageState extends State<LoginPage> {
             ],
           ),
         ),
-      ),
+      )),
     );
   }
 
