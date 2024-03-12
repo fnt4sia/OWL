@@ -1,6 +1,6 @@
 import illustration from "../../Assets/Illustration.png"
 import Web from "../../Assets/web.png"
-import SearchBar from "../../Components/SearchBar"
+import SearchBar from "../../Components/SearchBar/SearchBar"
 import Mentor from "../../Assets/mentor.png"
 import Community from "../../Assets/community.png"
 
