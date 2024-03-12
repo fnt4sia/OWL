@@ -7,6 +7,7 @@ class LoginModel {
   static Future<bool> loginEmail(String email, String password) async {
     final loginResponse = await http.post(
       url,
+      headers: {'Content-Type': 'application/json'},
       body: jsonEncode(
         {
           'email': email,
