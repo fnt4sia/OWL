@@ -67,9 +67,10 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ),
               const SizedBox(height: 30),
-              inputForm(false, emailController, 'Email'),
+              inputForm(false, emailController, 'Enter username or email',
+                  'Username'),
               const SizedBox(height: 15),
-              inputForm(true, passwordController, 'Password'),
+              inputForm(true, passwordController, 'Enter password', 'Password'),
               const SizedBox(height: 5),
               errorText.isNotEmpty
                   ? const Text(
@@ -135,24 +136,44 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Widget inputForm(bool hidden, TextEditingController controller, String hint) {
-    return TextField(
-      obscureText: hidden,
-      controller: controller,
-      decoration: InputDecoration(
-        hintStyle: const TextStyle(
-          fontWeight: FontWeight.w400,
-        ),
-        hintText: hint,
-        contentPadding: const EdgeInsets.all(15),
-        border: const OutlineInputBorder(
-          borderRadius: BorderRadius.all(
-            Radius.circular(
-              8,
-            ),
+  Widget inputForm(bool hidden, TextEditingController controller, String hint,
+      String label) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          label,
+          style: const TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.w500,
           ),
         ),
-      ),
+        const SizedBox(height: 8),
+        TextField(
+          obscureText: hidden,
+          controller: controller,
+          decoration: InputDecoration(
+            isDense: true,
+            enabledBorder: const OutlineInputBorder(
+              borderSide: BorderSide(color: Colors.transparent),
+              borderRadius: BorderRadius.all(
+                Radius.circular(
+                  30,
+                ),
+              ),
+            ),
+            fillColor: const Color(0xffffffff),
+            filled: true,
+            contentPadding:
+                const EdgeInsets.symmetric(vertical: 8, horizontal: 27),
+            hintStyle: const TextStyle(
+              fontWeight: FontWeight.w400,
+              fontSize: 14,
+            ),
+            hintText: hint,
+          ),
+        ),
+      ],
     );
   }
 
