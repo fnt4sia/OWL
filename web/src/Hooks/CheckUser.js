@@ -9,6 +9,7 @@ const CheckUserLoggedIn = async () => {
         // Get the user session
         const { data: { user: userSession } } = await supabase.auth.getUser();
         if (userSession) {
+            localStorage.removeItem('session');
             return;
         }
 
@@ -27,8 +28,6 @@ const CheckUserLoggedIn = async () => {
         }
 
         localStorage.removeItem('session');
-        window.location.href = '/login';
-
     } catch (error) {
         localStorage.removeItem('session');
         window.location.href = '/login';
