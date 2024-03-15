@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../../shared/widgets/background.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -20,7 +21,7 @@ class _SplashScreenState extends State<SplashScreen> {
       if (jwt == null) {
         nav.pushReplacementNamed('/login');
       } else {
-        nav.pushReplacementNamed('/home');
+        nav.pushReplacementNamed('/login');
       }
     });
   }
@@ -29,11 +30,14 @@ class _SplashScreenState extends State<SplashScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.orange,
-      body: Center(
-        child: Image.asset(
-          'assets/splash.png',
-          width: MediaQuery.of(context).size.width * 0.5,
+      body: BackgroundColor(
+        main: Center(
+          child: Image.asset(
+            'assets/splash.png',
+            width: MediaQuery.of(context).size.width * 0.5,
+          ),
         ),
+        splash: true,
       ),
     );
   }
