@@ -1,5 +1,6 @@
 const supabase = require('../util/con_db');
 const jwt = require('jsonwebtoken');
+const fs = require('fs');
 
 dev = false;
 key = process.env.JWTKEY;
@@ -10,7 +11,7 @@ const oauth = async (req, res, next) => {
         const { data, error } = await supabase.auth.signInWithOAuth({
             provider: req.params.provider,
             options: {
-                redirectTo: 'https://www.owlearns.site'
+                redirectTo: 'https://www.owlearns.site/home'
             }
         });
 
@@ -215,4 +216,63 @@ const recoverPassword = async (req, res, next) => {
     
 }
 
-module.exports = { loginEmail, registerEmail, deleteUser, recoverAccount, recoverPassword, oauth };
+const updateProfile = async (req, res, next) => {
+    try{
+        rawToken = req.headers.authorization;
+        const access_token = rawToken.substring(7);
+        const { error: checks } = await supabase.auth.getSession(access_token);
+        userName = req.file.username;
+        if (checks) {
+            res.status(401).json({
+                message: 'Unauthorized access!'
+            });
+            return;
+        }
+
+        const user = jwt.decode(access_token, key);
+        let imageUrl;
+        if(req.file){
+            try{
+                image = req.file;
+                const { data, error } = await supabase.storage
+                .from('avatars')
+                .upload(`${user.sub}_avatar.jpg`, image, {
+                cacheControl: '3600',
+                upsert: true,
+                });
+
+                if(error){
+                    console.log(error);
+                }
+
+                imageUrl = supabase.storage
+                .from('public-bucket')
+                .getPublicUrl(`${user.sub}_avatar.jpeg`);
+                }catch(error){
+                console.log(error);
+            }
+        }
+        
+        const { data, error } = await supabase
+        .from('profiles')
+        .update({
+            username : userName,
+            avatar : imageUrl.data.publicUrl
+          })
+        .eq('id',user.sub);
+        
+        fs.unlinkSync(image.path);
+
+        res.status(200).json({
+            message: 'Succesfully Update Profile!',
+            profilePicture : imageUrl
+        });
+        
+    }catch(error){
+        res.status(500).json({
+            message: error.message
+        });
+    }
+}
+
+module.exports = { loginEmail, registerEmail, deleteUser, recoverAccount, recoverPassword, oauth, updateProfile };

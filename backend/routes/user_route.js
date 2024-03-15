@@ -1,6 +1,7 @@
 const express = require('express');
-const { loginEmail, registerEmail, deleteUser, recoverAccount, recoverPassword, oauth } = require('../controllers/user');
+const { loginEmail, registerEmail, deleteUser, recoverAccount, recoverPassword, oauth, updateProfile } = require('../controllers/user');
 const supabase = require('../util/con_db');
+const upload = require('../middleware/upload_file');
 
 const router = express.Router();
 
@@ -23,5 +24,7 @@ router.delete('/delete', deleteUser);
 router.post('/recovery', recoverAccount);
 
 router.post('/recovery/password', recoverPassword);
+
+router.post('/editProfile', upload.single('image'),updateProfile);
 
 module.exports = router;
