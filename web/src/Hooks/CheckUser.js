@@ -1,4 +1,4 @@
-import supabase from '../middleware/supabase';
+import supabase from '../Middleware/Supabase';
 
 const CheckUserLoggedIn = async () => {
     try {

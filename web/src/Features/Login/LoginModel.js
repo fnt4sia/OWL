@@ -1,4 +1,4 @@
-import supabase from '../../middleware/supabase';
+import supabase from '../../Middleware/Supabase';
 
 const sendData = async (email, password) => {
     fetch('https://nodejsdeployowl.et.r.appspot.com/login', {
@@ -19,7 +19,7 @@ const sendData = async (email, password) => {
         const access_token = session.access_token;
         const refresh_token = session.refresh_token;
 
-        const { user, error } = await supabase.auth.setSession({
+        const { error } = await supabase.auth.setSession({
             access_token,
             refresh_token
         });
@@ -28,7 +28,6 @@ const sendData = async (email, password) => {
             throw error;
         }
 
-        // localStorage.setItem('session', session)
         window.location.href = '/'
     }
     ).catch((err) => console.log(err))
