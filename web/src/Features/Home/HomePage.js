@@ -20,7 +20,7 @@ export default function TestPage(){
 
 
     if(isLoading){
-        return(<>Loading Tod...</>)
+        return(<>Loading</>)
     }else{
         return (
             <>

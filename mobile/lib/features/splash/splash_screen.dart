@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import '../../shared/widgets/background.dart';
+import '../../shared/utils/token_handler.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -17,8 +17,7 @@ class _SplashScreenState extends State<SplashScreen> {
     Future.delayed(
       const Duration(seconds: 2),
       () async {
-        final SharedPreferences prefs = await SharedPreferences.getInstance();
-        final jwt = prefs.getString('jwt');
+        final jwt = await Token.getToken();
 
         if (jwt == null) {
           nav.pushReplacementNamed('/login');
