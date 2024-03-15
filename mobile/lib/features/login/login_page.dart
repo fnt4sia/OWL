@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mobile/shared/themes/login_theme.dart';
+import 'package:mobile/shared/widgets/background.dart';
 import 'login_model.dart';
 
 class LoginPage extends StatefulWidget {
@@ -33,106 +33,109 @@ class _LoginPageState extends State<LoginPage> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: SafeArea(
-          child: LoginTheme(
-        main: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 40),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Row(
-                children: [
-                  Text(
-                    'Masuk ke ',
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.w500,
-                      fontSize: 24,
-                    ),
-                  ),
-                  Text(
-                    'OWL.',
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 24,
-                    ),
-                  )
-                ],
-              ),
-              const Text(
-                'Silahkan masukkan informasi akun kamu.',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w400,
-                ),
-              ),
-              const SizedBox(height: 30),
-              inputForm(false, emailController, 'Enter username or email',
-                  'Username'),
-              const SizedBox(height: 15),
-              inputForm(true, passwordController, 'Enter password', 'Password'),
-              const SizedBox(height: 5),
-              errorText.isNotEmpty
-                  ? const Text(
-                      'Wrong Credentials Information',
+        child: BackgroundColor(
+          main: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Row(
+                  children: [
+                    Text(
+                      'Masuk ke ',
                       style: TextStyle(
-                        color: Colors.red,
+                        color: Colors.black,
+                        fontWeight: FontWeight.w500,
+                        fontSize: 24,
+                      ),
+                    ),
+                    Text(
+                      'OWL.',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 24,
+                      ),
+                    )
+                  ],
+                ),
+                const Text(
+                  'Silahkan masukkan informasi akun kamu.',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
+                const SizedBox(height: 30),
+                inputForm(false, emailController, 'Enter username or email',
+                    'Username'),
+                const SizedBox(height: 15),
+                inputForm(
+                    true, passwordController, 'Enter password', 'Password'),
+                const SizedBox(height: 5),
+                errorText.isNotEmpty
+                    ? const Text(
+                        'Wrong Credentials Information',
+                        style: TextStyle(
+                          color: Colors.red,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w400,
+                        ),
+                        textAlign: TextAlign.center,
+                      )
+                    : const SizedBox(),
+                const SizedBox(height: 5),
+                const Text(
+                  'Forgot Password ?',
+                  style: TextStyle(
+                    fontWeight: FontWeight.w300,
+                    color: Colors.blue,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 10),
+                InkWell(
+                  onTap: () {
+                    handleLogin();
+                  },
+                  child: Container(
+                    width: MediaQuery.of(context).size.width,
+                    padding: const EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      color: Colors.orange,
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: const Text(
+                      'Login',
+                      style: TextStyle(
+                        color: Colors.black,
                         fontSize: 14,
                         fontWeight: FontWeight.w400,
                       ),
                       textAlign: TextAlign.center,
-                    )
-                  : const SizedBox(),
-              const SizedBox(height: 5),
-              const Text(
-                'Forgot Password ?',
-                style: TextStyle(
-                  fontWeight: FontWeight.w300,
-                  color: Colors.blue,
-                ),
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 10),
-              InkWell(
-                onTap: () {
-                  handleLogin();
-                },
-                child: Container(
-                  width: MediaQuery.of(context).size.width,
-                  padding: const EdgeInsets.all(10),
-                  decoration: BoxDecoration(
-                    color: Colors.orange,
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: const Text(
-                    'Login',
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 14,
-                      fontWeight: FontWeight.w400,
                     ),
-                    textAlign: TextAlign.center,
                   ),
                 ),
-              ),
-              const SizedBox(height: 20),
-              const Text(
-                'OR',
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 20),
-              buttonLoginWith('Google'),
-              const SizedBox(height: 15),
-              buttonLoginWith('Facebook'),
-              const SizedBox(height: 15),
-              const Text(
-                'Belum punya akun? Daftar disini',
-                textAlign: TextAlign.center,
-              ),
-            ],
+                const SizedBox(height: 20),
+                const Text(
+                  'OR',
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 20),
+                buttonLoginWith('Google'),
+                const SizedBox(height: 15),
+                buttonLoginWith('Facebook'),
+                const SizedBox(height: 15),
+                const Text(
+                  'Belum punya akun? Daftar disini',
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            ),
           ),
+          splash: false,
         ),
-      )),
+      ),
     );
   }
 
