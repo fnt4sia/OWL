@@ -14,16 +14,19 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
     final nav = Navigator.of(context);
-    Future.delayed(const Duration(seconds: 2), () async {
-      final SharedPreferences prefs = await SharedPreferences.getInstance();
-      final jwt = prefs.getString('jwt');
+    Future.delayed(
+      const Duration(seconds: 2),
+      () async {
+        final SharedPreferences prefs = await SharedPreferences.getInstance();
+        final jwt = prefs.getString('jwt');
 
-      if (jwt == null) {
-        nav.pushReplacementNamed('/login');
-      } else {
-        nav.pushReplacementNamed('/login');
-      }
-    });
+        if (jwt == null) {
+          nav.pushReplacementNamed('/login');
+        } else {
+          nav.pushReplacementNamed('/login');
+        }
+      },
+    );
   }
 
   @override
