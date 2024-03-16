@@ -21,7 +21,7 @@ class _SplashScreenState extends State<SplashScreen> {
         if (jwt == null) {
           nav.pushReplacementNamed('/login');
         } else {
-          nav.pushReplacementNamed('/main');
+          nav.pushReplacementNamed('/login');
         }
       },
     );

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/shared/widgets/background.dart';
 import 'login_model.dart';
+import '../../shared/widgets/text_field.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -70,11 +71,21 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ),
                 const SizedBox(height: 20),
-                inputForm(false, emailController, 'Enter username or email',
-                    'Username'),
-                const SizedBox(height: 15),
-                inputForm(
-                    true, passwordController, 'Enter password', 'Password'),
+                // CustomText(false, emailController, 'Enter username or email',
+                //     'Username'),
+                CustomTextField(
+                  hidden: false,
+                  controller: emailController,
+                  hint: 'Enter username or email',
+                  label: 'Username',
+                ),
+                const SizedBox(height: 10),
+                CustomTextField(
+                  hidden: true,
+                  controller: passwordController,
+                  hint: 'Enter Password',
+                  label: 'Password',
+                ),
                 const SizedBox(height: 5),
                 errorText.isNotEmpty
                     ? const Text(
@@ -88,14 +99,14 @@ class _LoginPageState extends State<LoginPage> {
                       )
                     : const SizedBox(),
                 const SizedBox(height: 5),
-                // const Text(
-                //   'Forgot Password ?',
-                //   style: TextStyle(
-                //     fontWeight: FontWeight.w300,
-                //     color: Colors.blue,
-                //   ),
-                //   textAlign: TextAlign.center,
-                // ),
+                const Text(
+                  'Forgot Password ?',
+                  style: TextStyle(
+                    fontWeight: FontWeight.w300,
+                    color: Colors.blue,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
                 const SizedBox(height: 10),
                 InkWell(
                   onTap: () {
@@ -129,58 +140,32 @@ class _LoginPageState extends State<LoginPage> {
                 const SizedBox(height: 15),
                 buttonLoginWith('GitHub', 'githubIcon'),
                 const SizedBox(height: 15),
-                const Text(
-                  'Belum punya akun? Daftar disini',
-                  textAlign: TextAlign.center,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Text(
+                      'Belum punya akun? ',
+                      textAlign: TextAlign.center,
+                    ),
+                    InkWell(
+                      onTap: () {
+                        Navigator.of(context).pushNamed('/register');
+                      },
+                      child: const Text(
+                        ' Daftar disini',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: Colors.blue,
+                        ),
+                      ),
+                    )
+                  ],
                 ),
               ],
             ),
           ),
-          splash: false,
         ),
       ),
-    );
-  }
-
-  Widget inputForm(bool hidden, TextEditingController controller, String hint,
-      String label) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const SizedBox(height: 10),
-        Text(
-          label,
-          style: const TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w500,
-          ),
-        ),
-        const SizedBox(height: 8),
-        TextField(
-          obscureText: hidden,
-          controller: controller,
-          decoration: InputDecoration(
-            isDense: true,
-            enabledBorder: const OutlineInputBorder(
-              borderSide: BorderSide(color: Colors.transparent),
-              borderRadius: BorderRadius.all(
-                Radius.circular(
-                  30,
-                ),
-              ),
-            ),
-            fillColor: const Color(0xffffffff),
-            filled: true,
-            contentPadding:
-                const EdgeInsets.symmetric(vertical: 8, horizontal: 27),
-            hintStyle: const TextStyle(
-              fontWeight: FontWeight.w400,
-              fontSize: 14,
-            ),
-            hintText: hint,
-          ),
-        ),
-      ],
     );
   }
 
