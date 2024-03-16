@@ -18,11 +18,10 @@ class _SplashScreenState extends State<SplashScreen> {
       const Duration(seconds: 2),
       () async {
         final jwt = await Token.getToken();
-
         if (jwt == null) {
-          nav.pushReplacementNamed('/login');
+          nav.pushReplacementNamed('/auth');
         } else {
-          nav.pushReplacementNamed('/login');
+          nav.pushReplacementNamed('/auth');
         }
       },
     );
