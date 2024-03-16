@@ -1,6 +1,8 @@
 const supabase = require('../util/con_db');
 const jwt = require('jsonwebtoken');
 const fs = require('fs');
+const e = require('express');
+const { log } = require('console');
 
 dev = false;
 key = process.env.JWTKEY;
@@ -233,12 +235,14 @@ const updateProfile = async (req, res, next) => {
         const id = user.sub;
         let imagePublicUrl;
         let avatar;
+        console.log(req.file);
 
         if(req.file){
             try{
                 //upload image to supabase storage, read the file with fs and get the public url
                 avatar = req.file;
-                const rawData = fs.readFileSync(avatar.path); 
+                // console.log(avatar);
+                const rawData = avatar.buffer;
                 const { data, error } = await supabase.storage
                     .from('avatars')
                     .upload(`${id}/avatar`, rawData, {
@@ -246,16 +250,17 @@ const updateProfile = async (req, res, next) => {
                     upsert: true,
                     contentType: avatar.mimetype
                 });
-
+        
                 if(error){
                     throw new Error(error.message);
                 }
-
+        
                 const { data: imageUrl } = await supabase.storage
                     .from('public-avatars')
                     .getPublicUrl(`${id}/avatar`);
-
+        
                 imagePublicUrl = imageUrl.publicUrl;
+
             } catch(error) {
                 throw new Error(error.message);
             }
@@ -272,8 +277,6 @@ const updateProfile = async (req, res, next) => {
         if(error){
             throw new Error(error.message);
         }
-        
-        fs.unlinkSync(avatar.path);
 
         res.status(200).json({
             message: 'Succesfully Update Profile!',
