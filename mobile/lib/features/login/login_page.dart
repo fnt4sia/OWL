@@ -59,14 +59,17 @@ class _LoginPageState extends State<LoginPage> {
                     )
                   ],
                 ),
-                const Text(
-                  'Silahkan masukkan informasi akun kamu.',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w400,
+                const Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    'Silahkan masukkan informasi akun kamu.',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w400,
+                    ),
                   ),
                 ),
-                const SizedBox(height: 30),
+                const SizedBox(height: 20),
                 inputForm(false, emailController, 'Enter username or email',
                     'Username'),
                 const SizedBox(height: 15),
@@ -85,14 +88,14 @@ class _LoginPageState extends State<LoginPage> {
                       )
                     : const SizedBox(),
                 const SizedBox(height: 5),
-                const Text(
-                  'Forgot Password ?',
-                  style: TextStyle(
-                    fontWeight: FontWeight.w300,
-                    color: Colors.blue,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
+                // const Text(
+                //   'Forgot Password ?',
+                //   style: TextStyle(
+                //     fontWeight: FontWeight.w300,
+                //     color: Colors.blue,
+                //   ),
+                //   textAlign: TextAlign.center,
+                // ),
                 const SizedBox(height: 10),
                 InkWell(
                   onTap: () {
@@ -102,15 +105,15 @@ class _LoginPageState extends State<LoginPage> {
                     width: MediaQuery.of(context).size.width,
                     padding: const EdgeInsets.all(10),
                     decoration: BoxDecoration(
-                      color: Colors.orange,
-                      borderRadius: BorderRadius.circular(12),
+                      color: const Color(0xff387ADF),
+                      borderRadius: BorderRadius.circular(30),
                     ),
                     child: const Text(
                       'Login',
                       style: TextStyle(
-                        color: Colors.black,
+                        color: Colors.white,
                         fontSize: 14,
-                        fontWeight: FontWeight.w400,
+                        fontWeight: FontWeight.w500,
                       ),
                       textAlign: TextAlign.center,
                     ),
@@ -118,13 +121,13 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 const SizedBox(height: 20),
                 const Text(
-                  'OR',
+                  'Atau masuk dengan',
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 20),
-                buttonLoginWith('Google'),
+                buttonLoginWith('Google', 'googleIcon'),
                 const SizedBox(height: 15),
-                buttonLoginWith('Facebook'),
+                buttonLoginWith('GitHub', 'githubIcon'),
                 const SizedBox(height: 15),
                 const Text(
                   'Belum punya akun? Daftar disini',
@@ -144,6 +147,7 @@ class _LoginPageState extends State<LoginPage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        const SizedBox(height: 10),
         Text(
           label,
           style: const TextStyle(
@@ -180,27 +184,34 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Widget buttonLoginWith(String text) {
+  Widget buttonLoginWith(String text, String icon) {
     return Container(
       width: MediaQuery.of(context).size.width,
       padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: const BorderRadius.all(
-          Radius.circular(12),
+          Radius.circular(30),
         ),
         border: Border.all(
           width: 1,
-          color: Colors.blue,
+          color: Colors.transparent,
         ),
       ),
-      child: Text(
-        'Login With $text',
-        style: const TextStyle(
-          color: Colors.blue,
-          fontSize: 14,
-        ),
-        textAlign: TextAlign.center,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Image.asset('assets/$icon.png'),
+          const SizedBox(width: 10),
+          Text(
+            'Masuk dengan $text',
+            style: const TextStyle(
+              color: Colors.black,
+              fontSize: 14,
+            ),
+            textAlign: TextAlign.center,
+          ),
+        ],
       ),
     );
   }
