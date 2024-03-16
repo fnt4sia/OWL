@@ -25,6 +25,6 @@ router.post('/recovery', recoverAccount);
 
 router.post('/recovery/password', recoverPassword);
 
-router.post('/editProfile', upload.single('image'),updateProfile);
+router.post('/editProfile', upload.single('avatar'), updateProfile);
 
 module.exports = router;

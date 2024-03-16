@@ -11,7 +11,7 @@ const oauth = async (req, res, next) => {
         const { data, error } = await supabase.auth.signInWithOAuth({
             provider: req.params.provider,
             options: {
-                redirectTo: 'https://www.owlearns.site/home'
+                redirectTo: 'https://www.owlearns.site/'
             }
         });
 
@@ -214,12 +214,14 @@ const recoverPassword = async (req, res, next) => {
     
 }
 
+/////////////////////////////////////////////////////update profile/////////////////////////////////////////////////////
 const updateProfile = async (req, res, next) => {
     try{
-        rawToken = req.headers.authorization;
-        const access_token = rawToken.substring(7);
+        //check if user is authorized and get user id
+        const access_token = req.body.access_token;
+        const userName = req.body.username;
         const { error: checks } = await supabase.auth.getSession(access_token);
-        userName = req.file.username;
+
         if (checks) {
             res.status(401).json({
                 message: 'Unauthorized access!'
@@ -228,42 +230,54 @@ const updateProfile = async (req, res, next) => {
         }
 
         const user = jwt.decode(access_token, key);
-        let imageUrl;
+        const id = user.sub;
+        let imagePublicUrl;
+        let avatar;
+
         if(req.file){
             try{
-                image = req.file;
+                //upload image to supabase storage, read the file with fs and get the public url
+                avatar = req.file;
+                const rawData = fs.readFileSync(avatar.path); 
                 const { data, error } = await supabase.storage
-                .from('avatars')
-                .upload(`${user.sub}_avatar.jpg`, image, {
-                cacheControl: '3600',
-                upsert: true,
+                    .from('avatars')
+                    .upload(`${id}/avatar`, rawData, {
+                    cacheControl: '3600',
+                    upsert: true,
+                    contentType: avatar.mimetype
                 });
 
                 if(error){
-                    console.log(error);
+                    throw new Error(error.message);
                 }
 
-                imageUrl = supabase.storage
-                .from('public-bucket')
-                .getPublicUrl(`${user.sub}_avatar.jpeg`);
-                }catch(error){
-                console.log(error);
+                const { data: imageUrl } = await supabase.storage
+                    .from('public-avatars')
+                    .getPublicUrl(`${id}/avatar`);
+
+                imagePublicUrl = imageUrl.publicUrl;
+            } catch(error) {
+                throw new Error(error.message);
             }
         }
         
         const { data, error } = await supabase
-        .from('profiles')
-        .update({
-            username : userName,
-            avatar : imageUrl.data.publicUrl
-          })
-        .eq('id',user.sub);
+            .from('profiles')
+            .update({
+                username : userName,
+                avatar : imagePublicUrl
+            })
+            .eq('id', user.sub);
+
+        if(error){
+            throw new Error(error.message);
+        }
         
-        fs.unlinkSync(image.path);
+        fs.unlinkSync(avatar.path);
 
         res.status(200).json({
             message: 'Succesfully Update Profile!',
-            profilePicture : imageUrl
+            profilePicture : imagePublicUrl
         });
         
     }catch(error){
