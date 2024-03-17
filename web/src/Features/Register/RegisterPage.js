@@ -1,8 +1,9 @@
 import googleIcon from '../../Assets/google.png'
 import githubIcon from '../../Assets/github.png'
 import image from '../../Assets/login.png'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import {sendData, oauth} from './RegisterModel'
+import CheckUserLoggedIn  from "../../Hooks/CheckUser"
 
 export default function RegisterPage(){
 
