@@ -9,7 +9,7 @@ const sendData = async (email, password) => {
             'password': password
         }),
         redirect: 'follow',
-        credentials: 'same-origin'  
+        credentials: 'same-origin'
     }).then((response) =>
         response.text()
     ).then(async (result) =>{
