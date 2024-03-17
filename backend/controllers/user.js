@@ -258,7 +258,7 @@ const updateProfile = async (req, res, next) => {
                 }
         
                 const { data: imageUrl } = await supabase.storage
-                    .from('public-avatars')
+                    .from('avatars')
                     .getPublicUrl(`${id}/avatar`);
         
                 imagePublicUrl = imageUrl.publicUrl;
