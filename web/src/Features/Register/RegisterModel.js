@@ -10,8 +10,10 @@ const sendData = async (email, password) => {
         }),
         redirect: 'follow'
     }).then((response) =>
-        response.text()
-    ).catch((err) => console.log(err))
+        console.log(response.text())
+    ).then(()=>{
+        // window.location.href = '/login'
+    }).catch((err) => console.log(err))
 }
 
 const oauth = async (provider) => {

@@ -3,7 +3,7 @@ import githubIcon from '../../Assets/github.png'
 import image from '../../Assets/login.png'
 import { useState, useEffect } from 'react'
 import {sendData, oauth} from './RegisterModel'
-import CheckUserLoggedIn  from "../../Hooks/CheckUser"
+import CheckUserLoggedIn from '../../Hooks/CheckUser'
 
 export default function RegisterPage(){
 
@@ -21,7 +21,7 @@ export default function RegisterPage(){
     const onChangePassword2 = (e) => {
         setPassword2(e.target.value)
     }
-    const register = async () => {
+    const register = async (email, password) => {
         if(password === password2){
             sendData(email, password).then((response)=>{
                 console.log(response)
@@ -52,7 +52,6 @@ export default function RegisterPage(){
                     <span className="text-2xl lg:text-4xl font-bold"> OWL.</span>
                 </div>
                 <p className="text-base lg:text-lg ">Silahkan masukkan informasi akun kamu.</p>
-                <form>
 
                     <div className="flex flex-col gap-4 mt-4">
                         <input type="email" value={email} onChange={onChangeEmail} className="border-gray-400 border rounded-md py-1 lg:py-2 px-3 placeholder-black placeholder-opacity-70" placeholder="Email"/>
@@ -64,10 +63,9 @@ export default function RegisterPage(){
                         </div>
                     </div>
                     <button 
-                    formAction={() => register(email, password)} 
+                    onClick={() => register(email, password)} 
                     className="bg-orange-400 p-1 rounded-md font-light mt-2 lg:mt-4 lg:text-lg">Register</button>
 
-                </form>
                 <hr className="my-4"/>
                 <button 
                     className="text-blue font-light p-1 lg:p-2 border border-blue-300 rounded-lg bg-white text-blue-300 flex justify-center items-center gap-2" 
