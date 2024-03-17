@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:mobile/shared/widgets/background.dart';
 import 'login_model.dart';
@@ -170,33 +172,39 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Widget buttonLoginWith(String text, String icon) {
-    return Container(
-      width: MediaQuery.of(context).size.width,
-      padding: const EdgeInsets.all(8),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: const BorderRadius.all(
-          Radius.circular(30),
-        ),
-        border: Border.all(
-          width: 1,
-          color: Colors.transparent,
-        ),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Image.asset('assets/$icon.png'),
-          const SizedBox(width: 10),
-          Text(
-            'Masuk dengan $text',
-            style: const TextStyle(
-              color: Colors.black,
-              fontSize: 14,
-            ),
-            textAlign: TextAlign.center,
+    return InkWell(
+      onTap: () {
+        LoginModel.loginOauth(text.toLowerCase())
+            .then((_) => Navigator.of(context).pushReplacementNamed('/main'));
+      },
+      child: Container(
+        width: MediaQuery.of(context).size.width,
+        padding: const EdgeInsets.all(8),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: const BorderRadius.all(
+            Radius.circular(30),
           ),
-        ],
+          border: Border.all(
+            width: 1,
+            color: Colors.transparent,
+          ),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Image.asset('assets/$icon.png'),
+            const SizedBox(width: 10),
+            Text(
+              'Masuk dengan $text',
+              style: const TextStyle(
+                color: Colors.black,
+                fontSize: 14,
+              ),
+              textAlign: TextAlign.center,
+            ),
+          ],
+        ),
       ),
     );
   }
