@@ -1,5 +1,7 @@
+import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:uni_links/uni_links.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../shared/utils/supabase.dart';
 
@@ -27,18 +29,38 @@ class LoginModel {
     }
   }
 
-  static Future<void> loginOauth(String provider) async {
+  static Future<bool> loginOauth(String provider) async {
     final response = await http.post(
       Uri.parse(
           'https://nodejsdeployowl.et.r.appspot.com/oauth/$provider/mobile'),
     );
 
     if (response.statusCode == 200) {
+      StreamController<String> controller = StreamController<String>();
       final result = jsonDecode(response.body);
-      final url = Uri.parse(result['url']);
-      print(url);
+      final String url = result['url'];
 
-      await launchUrl(url);
+      await launchUrl(Uri.parse(url));
+
+      linkStream.listen((String? link) {
+        if (link != null) {
+          controller.add(link);
+        }
+      });
+
+      await for (String link in controller.stream) {
+        int startIndex =
+            link.indexOf("refresh_token=") + "refresh_token=".length;
+        int endIndex = link.indexOf("&token_type");
+        String refreshToken = link.substring(startIndex, endIndex).trim();
+
+        SupabaseManager.supabase.auth.setSession(refreshToken);
+        return true;
+      }
+
+      controller.close();
+      return false;
     }
+    return false;
   }
 }
