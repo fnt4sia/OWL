@@ -130,7 +130,7 @@ const deleteUser = async (req, res, next) => {
         const { error: errorDelete } = await supabase.auth.admin.deleteUser(user.sub);
         const { data: deleteStorage, error: errorDeleteStorage } = await supabase.storage
             .from('avatars')
-            .remove(`${user.sub}`);
+            .remove([`${user.sub}/avatar`]);
 
         if (errorDelete) {
             throw new Error(errorDelete.message);
