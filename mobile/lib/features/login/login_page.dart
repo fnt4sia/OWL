@@ -4,7 +4,8 @@ import 'login_model.dart';
 import '../../shared/widgets/text_field.dart';
 
 class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+  final String message;
+  const LoginPage({super.key, this.message = ''});
 
   @override
   State<LoginPage> createState() => _LoginPageState();
@@ -71,13 +72,11 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ),
                 const SizedBox(height: 20),
-                // CustomText(false, emailController, 'Enter username or email',
-                //     'Username'),
                 CustomTextField(
                   hidden: false,
                   controller: emailController,
-                  hint: 'Enter username or email',
-                  label: 'Username',
+                  hint: 'Enter email',
+                  label: 'Email',
                 ),
                 const SizedBox(height: 10),
                 CustomTextField(
@@ -88,9 +87,20 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 const SizedBox(height: 5),
                 errorText.isNotEmpty
-                    ? const Text(
-                        'Wrong Credentials Information',
-                        style: TextStyle(
+                    ? Text(
+                        errorText,
+                        style: const TextStyle(
+                          color: Colors.red,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w400,
+                        ),
+                        textAlign: TextAlign.center,
+                      )
+                    : const SizedBox(),
+                widget.message.isNotEmpty
+                    ? Text(
+                        widget.message,
+                        style: const TextStyle(
                           color: Colors.red,
                           fontSize: 14,
                           fontWeight: FontWeight.w400,
@@ -110,6 +120,9 @@ class _LoginPageState extends State<LoginPage> {
                 const SizedBox(height: 10),
                 InkWell(
                   onTap: () {
+                    setState(() {
+                      errorText = '';
+                    });
                     handleLogin();
                   },
                   child: Container(

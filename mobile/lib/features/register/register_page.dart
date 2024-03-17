@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/features/login/login_page.dart';
+import 'package:mobile/features/register/register_model.dart';
 import '../../shared/widgets/background.dart';
 import '../../shared/widgets/text_field.dart';
 
@@ -11,6 +13,50 @@ class RegisterPage extends StatefulWidget {
 
 class _RegisterPageState extends State<RegisterPage> {
   final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  final TextEditingController confirmController = TextEditingController();
+  String errorText = '';
+  String successText = '';
+
+  void handleRegister() {
+    String emailRegex = r'^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$';
+
+    if (RegExp(emailRegex).hasMatch(emailController.text)) {
+      if (passwordController.text != confirmController.text) {
+        setState(() {
+          errorText = "Password Doesn't Match";
+        });
+        return;
+      } else if (passwordController.text.length < 6) {
+        setState(() {
+          errorText = "Password Must Contains More Than 6 Letters";
+        });
+      } else {
+        RegisterModel.registerEmail(
+                emailController.text, passwordController.text)
+            .then((value) {
+          if (value) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) =>
+                    const LoginPage(message: 'Check Your Email To Verify'),
+              ),
+            );
+          } else {
+            setState(() {
+              errorText = "Email Is Already Exist!";
+            });
+          }
+        });
+      }
+    } else {
+      setState(() {
+        errorText = 'Please Enter A Valid Email';
+      });
+      return;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -48,32 +94,32 @@ class _RegisterPageState extends State<RegisterPage> {
                 CustomTextField(
                   hidden: false,
                   controller: emailController,
-                  hint: "Enter Username or Email",
+                  hint: "Enter Email",
                   label: "Email",
                 ),
                 const SizedBox(height: 10),
                 CustomTextField(
                   hidden: false,
-                  controller: emailController,
-                  hint: "Enter Username or Email",
-                  label: "Email",
+                  controller: passwordController,
+                  hint: "Enter Password",
+                  label: "Password",
                 ),
                 const SizedBox(height: 10),
                 CustomTextField(
                   hidden: false,
-                  controller: emailController,
-                  hint: "Enter Username or Email",
-                  label: "Email",
-                ),
-                const SizedBox(height: 10),
-                CustomTextField(
-                  hidden: false,
-                  controller: emailController,
-                  hint: "Enter Username or Email",
-                  label: "Email",
+                  controller: confirmController,
+                  hint: "Confirm Password",
+                  label: "Confirm Password",
                 ),
                 const SizedBox(height: 20),
                 InkWell(
+                  onTap: () {
+                    setState(() {
+                      errorText = '';
+                      successText = '';
+                    });
+                    handleRegister();
+                  },
                   child: Container(
                     width: MediaQuery.of(context).size.width,
                     padding: const EdgeInsets.all(10),
@@ -82,7 +128,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       borderRadius: BorderRadius.circular(30),
                     ),
                     child: const Text(
-                      'Login',
+                      'Register',
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 14,
@@ -92,12 +138,27 @@ class _RegisterPageState extends State<RegisterPage> {
                     ),
                   ),
                 ),
-                const SizedBox(height: 15),
+                const SizedBox(height: 10),
+                errorText.isNotEmpty
+                    ? Text(
+                        errorText,
+                        style: const TextStyle(
+                            color: Colors.red, fontWeight: FontWeight.w400),
+                      )
+                    : const SizedBox(),
+                successText.isNotEmpty
+                    ? Text(
+                        successText,
+                        style: const TextStyle(
+                            color: Colors.green, fontWeight: FontWeight.w400),
+                      )
+                    : const SizedBox(),
+                const SizedBox(height: 5),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     const Text(
-                      'Belum punya akun? ',
+                      'Sudah punya akun? ',
                       textAlign: TextAlign.center,
                     ),
                     InkWell(
@@ -105,7 +166,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         Navigator.of(context).pushNamed('/login');
                       },
                       child: const Text(
-                        ' Daftar disini',
+                        ' Masuk disini',
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           color: Colors.blue,
