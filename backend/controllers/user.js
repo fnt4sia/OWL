@@ -57,7 +57,7 @@ const loginEmail = async (req, res, next) => {
         
         if (error) {
             res.status(401).json({
-                message: 'Invalid login credentials'
+                message: error.message
             });
             return;
 
@@ -88,7 +88,11 @@ const loginEmail = async (req, res, next) => {
 const registerEmail = async (req, res, next) => {
     try {
         const { email, password } = req.body;
-
+        let redirect;
+        if (req.params.device == 'mobile')
+            redirect = 'io.supabase.flutterquickstart://login-callback';
+        else if (req.params.device == 'web')
+            redirect = 'https://www.owlearns.site';
         //check if email already exists
         const { data: users, error } = await supabase.from('profiles').select('email').eq('email', email);
         
@@ -111,7 +115,8 @@ const registerEmail = async (req, res, next) => {
                 data: {
                     name: username
                 }
-            }
+            },
+            redirectTo: redirect
         });
 
         if (errorSignup) {
@@ -183,7 +188,7 @@ const recoverAccount = async (req, res, next) => {
         }
 
         const { error } = await supabase.auth.resetPasswordForEmail(req.body.email, {
-            redirectTo: 'http://localhost:3000/recover-password'
+            redirectTo: 'http://www.owlearns.site/recover-password'
         });
 
         if (error) {

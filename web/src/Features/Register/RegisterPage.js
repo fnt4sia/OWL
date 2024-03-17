@@ -30,6 +30,16 @@ export default function RegisterPage(){
         }
     }
 
+    useEffect(() => {
+        const check = async () => {
+            const isLoggedIn = await CheckUserLoggedIn();
+            if (isLoggedIn) {
+                window.location.href = '/';
+            }
+        }
+        check();
+    }, [])
+
     return(
         <div className="py-12 px-4 lg:py-20 lg:px-8 bg-OWL-base h-screen md:flex md:justify-center md:items-center ">
             <div className='hidden md:block'>
