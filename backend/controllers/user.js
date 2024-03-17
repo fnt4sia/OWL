@@ -1,8 +1,5 @@
 const supabase = require('../util/con_db');
 const jwt = require('jsonwebtoken');
-const fs = require('fs');
-const e = require('express');
-const { log } = require('console');
 
 dev = false;
 key = process.env.JWTKEY;
@@ -123,7 +120,7 @@ const registerEmail = async (req, res, next) => {
 const deleteUser = async (req, res, next) => {
     try {
         const access_token = req.body.access_token;
-        const { data, error } = await supabase.auth.getSession(access_token);
+        const { data, error } = await supabase.auth.getUser(access_token);
 
         if (error) {
             throw new Error(error.message);
@@ -131,9 +128,16 @@ const deleteUser = async (req, res, next) => {
         
         const user = jwt.decode(access_token, key);
         const { error: errorDelete } = await supabase.auth.admin.deleteUser(user.sub);
+        const { data: deleteStorage, error: errorDeleteStorage } = await supabase.storage
+            .from('avatars')
+            .remove(`${user.sub}`);
 
         if (errorDelete) {
             throw new Error(errorDelete.message);
+        }
+
+        if (errorDeleteStorage) {
+            throw new Error(errorDeleteStorage.message);
         }
 
         res.status(200).json({
@@ -187,7 +191,7 @@ const recoverAccount = async (req, res, next) => {
 const recoverPassword = async (req, res, next) => {
     try {
         const access_token = req.body.access_token;
-        const { error: checks } = await supabase.auth.getSession(access_token);
+        const { error: checks } = await supabase.auth.getUser(access_token);
 
         if (checks) {
             res.status(401).json({
@@ -222,7 +226,7 @@ const updateProfile = async (req, res, next) => {
         //check if user is authorized and get user id
         const access_token = req.body.access_token;
         const userName = req.body.username;
-        const { error: checks } = await supabase.auth.getSession(access_token);
+        const { error: checks } = await supabase.auth.getUser(access_token);
 
         if (checks) {
             res.status(401).json({
@@ -235,13 +239,11 @@ const updateProfile = async (req, res, next) => {
         const id = user.sub;
         let imagePublicUrl;
         let avatar;
-        console.log(req.file);
 
         if(req.file){
             try{
                 //upload image to supabase storage, read the file with fs and get the public url
                 avatar = req.file;
-                // console.log(avatar);
                 const rawData = avatar.buffer;
                 const { data, error } = await supabase.storage
                     .from('avatars')
@@ -264,9 +266,11 @@ const updateProfile = async (req, res, next) => {
             } catch(error) {
                 throw new Error(error.message);
             }
+        } else {
+            throw new Error('No image uploaded!');
         }
         
-        const { data, error } = await supabase
+        const { error } = await supabase
             .from('profiles')
             .update({
                 username : userName,
