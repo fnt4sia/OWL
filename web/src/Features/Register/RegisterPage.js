@@ -1,7 +1,8 @@
 import googleIcon from '../../Assets/google.png'
 import githubIcon from '../../Assets/github.png'
 import image from '../../Assets/login.png'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import CheckUserLoggedIn  from "../../Hooks/CheckUser"
 // import {sendData, oauth} from './RegisterModel'
 
 export default function RegisterPage(){
@@ -26,6 +27,16 @@ export default function RegisterPage(){
             console.log("password is not the same")
         }
     }
+
+    useEffect(() => {
+        const check = async () => {
+            const isLoggedIn = await CheckUserLoggedIn();
+            if (isLoggedIn) {
+                window.location.href = '/';
+            }
+        }
+        check();
+    }, [])
 
     return(
         <div className="py-12 px-4 lg:py-20 lg:px-8 bg-OWL-base h-screen md:flex md:justify-center md:items-center ">

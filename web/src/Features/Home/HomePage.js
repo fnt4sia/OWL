@@ -12,10 +12,15 @@ export default function TestPage(){
     const [isLoading, setLoading] = useState(true);
 
     useEffect(() => {
-        CheckUserLoggedIn()
-        .then(() => {
-            setLoading(false);
-        })
+        const check = async () => {
+            const isLoggedIn = await CheckUserLoggedIn();
+            if (isLoggedIn) {
+                setLoading(false);
+            } else {
+                window.location.href = '/login';
+            }
+        }
+        check();
     }, [])
 
 

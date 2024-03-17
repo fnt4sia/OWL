@@ -3,6 +3,7 @@ import githubIcon from '../../Assets/github.png'
 import image from '../../Assets/login.png'
 import { useState, useEffect } from 'react'
 import {sendData, oauth} from './LoginModel'
+import CheckUserLoggedIn  from "../../Hooks/CheckUser"
 
 
 export default function LoginPage(){
@@ -17,6 +18,17 @@ export default function LoginPage(){
     const onChangePassword = (e) => {
         setPassword(e.target.value)
     }
+
+    useEffect(() => {
+        const check = async () => {
+            const isLoggedIn = await CheckUserLoggedIn();
+            if (isLoggedIn) {
+                window.location.href = '/';
+            }
+        }
+        check();
+    }, [])
+
 
     const  login = async (email, password) => {
         let res = await sendData(email, password)
