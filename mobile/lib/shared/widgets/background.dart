@@ -8,7 +8,7 @@ class BackgroundColor extends StatelessWidget {
   const BackgroundColor({
     super.key,
     required this.main,
-    required this.splash,
+    this.splash = false,
   });
 
   @override
@@ -46,10 +46,6 @@ class BackgroundColor extends StatelessWidget {
                 ),
               )
             : const SizedBox(),
-        Align(
-          alignment: Alignment.topLeft,
-          child: main,
-        ),
         Positioned(
           child: Container(
             decoration: const BoxDecoration(
@@ -59,6 +55,9 @@ class BackgroundColor extends StatelessWidget {
               ),
             ),
           ),
+        ),
+        Align(
+          child: main,
         ),
       ],
     );
