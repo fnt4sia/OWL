@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import '../../main.dart';
+import '../../shared/utils/supabase.dart';
 
 class LoginModel {
   static Uri url = Uri.parse('https://nodejsdeployowl.et.r.appspot.com/login');
@@ -21,7 +21,7 @@ class LoginModel {
 
       final refreshToken = session['refresh_token'];
 
-      await supabase.auth.setSession(refreshToken);
+      await SupabaseManager.supabase.auth.setSession(refreshToken);
       return true;
     } else {
       return false;
