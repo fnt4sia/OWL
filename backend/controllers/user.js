@@ -57,7 +57,7 @@ const loginEmail = async (req, res, next) => {
         
         if (error) {
             res.status(401).json({
-                message: 'Invalid login credentials'
+                message: error.message
             });
             return;
 
@@ -120,7 +120,7 @@ const registerEmail = async (req, res, next) => {
         });
 
         if (errorSignup) {
-            throw new Error(error.message);
+            throw new Error(errorSignup.message);
         }
 
         res.status(201).json({

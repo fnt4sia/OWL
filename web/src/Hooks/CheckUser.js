@@ -4,12 +4,12 @@ const CheckUserLoggedIn = async () => {
     try {
         const { data: { user: userSession } } = await supabase.auth.getUser();
         if (userSession) {
-            return;
+            return true;
         }
 
         throw new Error('No user session');
     } catch (error) {
-        window.location.href = '/login';
+        return false;
     }
 }
 
