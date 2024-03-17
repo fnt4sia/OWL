@@ -120,7 +120,7 @@ const registerEmail = async (req, res, next) => {
         });
 
         if (errorSignup) {
-            throw new Error(error.message);
+            throw new Error(errorSignup.message);
         }
 
         res.status(201).json({
