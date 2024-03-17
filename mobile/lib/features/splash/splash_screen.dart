@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../shared/widgets/background.dart';
 import '../../shared/utils/token_handler.dart';
+import '../../main.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -13,18 +14,21 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    final nav = Navigator.of(context);
-    Future.delayed(
-      const Duration(seconds: 2),
-      () async {
-        final jwt = await Token.getToken();
-        if (jwt == null) {
-          nav.pushReplacementNamed('/login');
-        } else {
-          nav.pushReplacementNamed('/login');
-        }
-      },
-    );
+    redirectPage();
+  }
+
+  Future<void> redirectPage() async {
+    await Future.delayed(const Duration(seconds: 2));
+    if (!mounted) {
+      return;
+    }
+
+    final session = supabase.auth.currentSession;
+    if (session != null) {
+      Navigator.of(context).pushReplacementNamed('/main');
+    } else {
+      Navigator.of(context).pushReplacementNamed('/login');
+    }
   }
 
   @override
