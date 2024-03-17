@@ -17,7 +17,7 @@ router.post('/login', loginEmail);
 
 router.post('/oauth/:provider/:device', oAuth);
 
-router.post('/register', registerEmail);
+router.post('/register/:device', registerEmail);
 
 router.delete('/delete', deleteUser);
 
