@@ -1,5 +1,5 @@
 const express = require('express');
-const { loginEmail, registerEmail, deleteUser, recoverAccount, recoverPassword, oauth, updateProfile } = require('../controllers/user');
+const { loginEmail, registerEmail, deleteUser, recoverAccount, recoverPassword, oAuth, updateProfile } = require('../controllers/user');
 const supabase = require('../util/con_db');
 const multer = require('../middleware/upload_file');
 
@@ -15,7 +15,7 @@ router.get('/', (req, res, next) => {
 
 router.post('/login', loginEmail);
 
-router.post('/oauth/:provider', oauth);
+router.post('/oauth/:provider/:device', oAuth);
 
 router.post('/register', registerEmail);
 

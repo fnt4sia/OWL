@@ -4,13 +4,27 @@ const jwt = require('jsonwebtoken');
 dev = false;
 key = process.env.JWTKEY;
 
-/////////////////////////////////////////////////////oauth/////////////////////////////////////////////////////
-const oauth = async (req, res, next) => {
+/////////////////////////////////////////////////////oAuth/////////////////////////////////////////////////////
+const oAuth = async (req, res, next) => {
     try {
+        const device = req.params.device
+        const provider = req.params.provider;
+        let redirect;
+        
+        if (provider != 'google' && provider != 'github')
+            throw new Error('Invalid provider');
+        
+        if (device == 'mobile')
+            redirect = 'io.supabase.flutterquickstart://login-callback';
+        else if (device == 'web')
+            redirect = 'https://www.owlearns.site';
+        else
+            throw new Error('Invalid device');
+
         const { data, error } = await supabase.auth.signInWithOAuth({
-            provider: req.params.provider,
+            provider: provider,
             options: {
-                redirectTo: 'https://www.owlearns.site/'
+                redirectTo: redirect
             }
         });
 
@@ -294,4 +308,4 @@ const updateProfile = async (req, res, next) => {
     }
 }
 
-module.exports = { loginEmail, registerEmail, deleteUser, recoverAccount, recoverPassword, oauth, updateProfile };
+module.exports = { loginEmail, registerEmail, deleteUser, recoverAccount, recoverPassword, oAuth, updateProfile };
