@@ -1,27 +1,27 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import '../../shared/utils/token_handler.dart';
+import '../../main.dart';
 
 class LoginModel {
   static Uri url = Uri.parse('https://nodejsdeployowl.et.r.appspot.com/login');
 
   static Future<bool> loginEmail(String email, String password) async {
-    final loginResponse = await http.post(
-      url,
+    final response = await http.post(
+      Uri.parse('https://nodejsdeployowl.et.r.appspot.com/login'),
       headers: {'Content-Type': 'application/json'},
-      body: jsonEncode(
-        {
-          'email': email,
-          'password': password,
-        },
-      ),
+      body: jsonEncode({
+        'email': email,
+        'password': password,
+      }),
     );
 
-    if (loginResponse.statusCode == 200) {
-      String jwtToken =
-          jsonDecode(loginResponse.body)['session']['access_token'];
+    if (response.statusCode == 200) {
+      final result = jsonDecode(response.body);
+      final session = result['session'];
 
-      await Token.setToken(jwtToken);
+      final refreshToken = session['refresh_token'];
+
+      await supabase.auth.setSession(refreshToken);
       return true;
     } else {
       return false;
