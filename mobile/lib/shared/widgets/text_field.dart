@@ -5,12 +5,13 @@ class CustomTextField extends StatelessWidget {
   final TextEditingController controller;
   final String hint;
   final String label;
-  const CustomTextField(
-      {super.key,
-      required this.hidden,
-      required this.controller,
-      required this.hint,
-      required this.label});
+  const CustomTextField({
+    super.key,
+    required this.hidden,
+    required this.controller,
+    required this.hint,
+    required this.label,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -37,6 +38,11 @@ class CustomTextField extends StatelessWidget {
                 Radius.circular(
                   30,
                 ),
+              ),
+            ),
+            focusedBorder: const OutlineInputBorder(
+              borderRadius: BorderRadius.all(
+                Radius.circular(30),
               ),
             ),
             fillColor: const Color(0xffffffff),
