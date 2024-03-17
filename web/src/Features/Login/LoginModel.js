@@ -34,7 +34,7 @@ const sendData = async (email, password) => {
 }
 
 const oauth = async (provider) => {
-    fetch(`https://nodejsdeployowl.et.r.appspot.com/oauth/${provider}`, {
+    fetch(`https://nodejsdeployowl.et.r.appspot.com/oauth/${provider}/web`, {
         method: 'POST',
         headers: {"Content-Type": "application/json"},
         redirect: 'follow',

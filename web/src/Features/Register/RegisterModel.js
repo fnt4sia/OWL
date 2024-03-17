@@ -1,0 +1,33 @@
+import supabase from '../../Middleware/Supabase';
+
+const sendData = async (email, password) => {
+    fetch('https://nodejsdeployowl.et.r.appspot.com/register/web', {
+        method: 'POST',
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({
+            'email': email,
+            'password': password
+        }),
+        redirect: 'follow'
+    }).then((response) =>
+        response.text()
+    ).catch((err) => console.log(err))
+}
+
+const oauth = async (provider) => {
+    fetch(`https://nodejsdeployowl.et.r.appspot.com/oauth/${provider}`, {
+        method: 'POST',
+        headers: {"Content-Type": "application/json"},
+        redirect: 'follow',
+        credentials: 'include'
+    }).then((response) => 
+        response.json()
+    ).then((result) => {
+        console.log(result);
+        if (result.url) {
+            window.location.href = result.url;
+        }
+    }).catch((err) => console.log(err))
+}
+
+export {sendData, oauth}

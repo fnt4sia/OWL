@@ -2,13 +2,14 @@ import googleIcon from '../../Assets/google.png'
 import githubIcon from '../../Assets/github.png'
 import image from '../../Assets/login.png'
 import { useState } from 'react'
-// import {sendData, oauth} from './RegisterModel'
+import {sendData, oauth} from './RegisterModel'
 
 export default function RegisterPage(){
 
     const[email, setEmail] = useState('');
     const[password, setPassword] = useState('');
     const[password2, setPassword2] = useState('');
+
 
     const onChangeEmail = (e) => {
         setEmail(e.target.value)
@@ -19,9 +20,11 @@ export default function RegisterPage(){
     const onChangePassword2 = (e) => {
         setPassword2(e.target.value)
     }
-    const register = () => {
+    const register = async () => {
         if(password === password2){
-            //sendData(email, password)
+            sendData(email, password).then((response)=>{
+                console.log(response)
+            })
         } else{
             console.log("password is not the same")
         }
@@ -38,29 +41,33 @@ export default function RegisterPage(){
                     <span className="text-2xl lg:text-4xl font-bold"> OWL.</span>
                 </div>
                 <p className="text-base lg:text-lg ">Silahkan masukkan informasi akun kamu.</p>
-                <div className="flex flex-col gap-4 mt-4">
-                    <input type="text" value={email} onChange={onChangeEmail} className="border-gray-400 border rounded-md py-1 lg:py-2 px-3 placeholder-black placeholder-opacity-70" placeholder="Email"/>
-                    <input type="password" password={password} onChange={onChangePassword} className="border-gray-400 border rounded-md py-1 lg:py-2 px-3 placeholder-black placeholder-opacity-70" placeholder="Password"/>
-                    <input type="password" password={password2} onChange={onChangePassword2} className="border-gray-400 border rounded-md py-1 lg:py-2 px-3 placeholder-black placeholder-opacity-70" placeholder="confirm Password"/>
-                    <div className="flex">
-                        <input type="checkbox"/>
-                        <p className="text-sm">&nbsp;Remember Me</p>
+                <form>
+
+                    <div className="flex flex-col gap-4 mt-4">
+                        <input type="email" value={email} onChange={onChangeEmail} className="border-gray-400 border rounded-md py-1 lg:py-2 px-3 placeholder-black placeholder-opacity-70" placeholder="Email"/>
+                        <input type="password" password={password} onChange={onChangePassword} className="border-gray-400 border rounded-md py-1 lg:py-2 px-3 placeholder-black placeholder-opacity-70" placeholder="Password"/>
+                        <input type="password" password={password2} onChange={onChangePassword2} className="border-gray-400 border rounded-md py-1 lg:py-2 px-3 placeholder-black placeholder-opacity-70" placeholder="Confirm Password"/>
+                        <div className="flex">
+                            <input type="checkbox"/>
+                            <p className="text-sm">&nbsp;Remember Me</p>
+                        </div>
                     </div>
-                </div>
-                <button 
-                onClick={() => register(email, password)} 
-                className="bg-orange-400 p-1 rounded-md font-light mt-2 lg:mt-4 lg:text-lg">Register</button>
+                    <button 
+                    formAction={() => register(email, password)} 
+                    className="bg-orange-400 p-1 rounded-md font-light mt-2 lg:mt-4 lg:text-lg">Register</button>
+
+                </form>
                 <hr className="my-4"/>
                 <button 
                     className="text-blue font-light p-1 lg:p-2 border border-blue-300 rounded-lg bg-white text-blue-300 flex justify-center items-center gap-2" 
-                    // onClick={() => oauth("google")}
+                    onClick={() => oauth("google")}
                 >
                     <img alt='gugel'src={googleIcon} width={20} height={20}/>
                     Register With Google
                 </button>
                 <button 
                     className="text-blue font-light p-1 lg:p-2 border border-blue-300 rounded-lg mt-2 bg-white text-blue-300 flex justify-center items-center gap-2" 
-                    // onClick={() => oauth("github")}
+                    onClick={() => oauth("github")}
                 >
                     <img alt='github' src={githubIcon} width={20} height={20}/>Register With Github
                 </button>
