@@ -328,4 +328,43 @@ const updateProfile = async (req, res, next) => {
     }
 }
 
-module.exports = { loginEmail, registerEmail, deleteUser, recoverAccount, recoverPassword, oAuth, updateProfile };
+const getUser = async(req, res, next) => {
+    try {
+        const access_token = req.body.access_token;
+        const { error: checks } = await supabase.auth.getUser(access_token);
+
+        if (checks) {
+            res.status(401).json({
+                status: 'error',
+                message: 'Unauthorized access!'
+            });
+            return;
+        }
+
+        const user = jwt.decode(access_token, key);
+        const id = user.sub;
+        const { data, error } = await supabase
+            .from('profiles')
+            .select('username, email, avatar')
+            .eq('id', id);
+
+        if(error){
+            throw new Error(error.message);
+        }
+
+        res.status(200).json({
+            status: 'success',
+            message: 'Succesfully Get Profile!',
+            profile : data
+        });
+
+    }catch(error){
+        res.status(500).json({
+            status: 'error',
+            message: error.message
+        });
+    }
+
+}
+
+module.exports = { loginEmail, registerEmail, deleteUser, recoverAccount, recoverPassword, oAuth, updateProfile, getUser };
