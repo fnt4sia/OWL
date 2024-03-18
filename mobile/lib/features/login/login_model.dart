@@ -6,7 +6,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../shared/utils/supabase.dart';
 
 class LoginModel {
-  static Future<bool> loginEmail(String email, String password) async {
+  static Future loginEmail(String email, String password) async {
     final response = await http.post(
       Uri.parse('https://nodejsdeployowl.et.r.appspot.com/login'),
       headers: {'Content-Type': 'application/json'},
@@ -16,17 +16,17 @@ class LoginModel {
       }),
     );
 
+    final bodyResponse = jsonDecode(response.body);
+
     if (response.statusCode == 200) {
-      final result = jsonDecode(response.body);
-      final session = result['session'];
+      final session = bodyResponse['session'];
 
       final refreshToken = session['refresh_token'];
 
       await SupabaseManager.supabase.auth.setSession(refreshToken);
-      return true;
-    } else {
-      return false;
     }
+
+    return bodyResponse;
   }
 
   static Future<bool> loginOauth(String provider) async {

@@ -20,11 +20,11 @@ class _LoginPageState extends State<LoginPage> {
   void handleLogin() {
     LoginModel.loginEmail(emailController.text, passwordController.text)
         .then((value) {
-      if (value) {
+      if (value['message'] == "success") {
         Navigator.of(context).pushReplacementNamed('/main');
       } else {
         setState(() {
-          errorText = 'Incorrect Credentials Information';
+          errorText = value['message'];
         });
       }
     });
