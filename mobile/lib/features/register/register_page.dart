@@ -35,12 +35,11 @@ class _RegisterPageState extends State<RegisterPage> {
         RegisterModel.registerEmail(
                 emailController.text, passwordController.text)
             .then((value) {
-          if (value['message'] == "success") {
+          if (value['status'] == "success") {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) =>
-                    const LoginPage(message: 'Check Your Email To Verify'),
+                builder: (context) => LoginPage(message: value['message']),
               ),
             );
           } else {

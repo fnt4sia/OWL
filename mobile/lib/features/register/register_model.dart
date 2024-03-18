@@ -15,6 +15,8 @@ class RegisterModel {
     );
 
     final responseBody = jsonDecode(response.body);
+
+    print(responseBody);
     return responseBody;
   }
 }

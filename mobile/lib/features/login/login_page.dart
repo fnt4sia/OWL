@@ -99,9 +99,9 @@ class _LoginPageState extends State<LoginPage> {
                     : const SizedBox(),
                 widget.message.isNotEmpty
                     ? Text(
-                        widget.message,
+                        "${widget.message}, Check Your Email",
                         style: const TextStyle(
-                          color: Colors.red,
+                          color: Colors.green,
                           fontSize: 14,
                           fontWeight: FontWeight.w400,
                         ),
