@@ -1,5 +1,5 @@
 const express = require('express');
-const { loginEmail, registerEmail, deleteUser, recoverAccount, recoverPassword, oAuth, updateProfile } = require('../controllers/user');
+const { loginEmail, registerEmail, deleteUser, recoverAccount, recoverPassword, oAuth, updateProfile, getUser } = require('../controllers/user');
 const supabase = require('../util/con_db');
 const multer = require('../middleware/upload_file');
 
@@ -25,6 +25,8 @@ router.post('/recovery', recoverAccount);
 
 router.post('/recovery/password', recoverPassword);
 
-router.post('/editProfile', multer.single('avatar'), updateProfile);
+router.post('/profile', getUser);
+
+router.patch('/editProfile', multer.single('avatar'), updateProfile);
 
 module.exports = router;

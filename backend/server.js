@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const userRoute = require('./routes/user_route');
+const courseRoute = require('./routes/course_route');
 const cookieParser = require('cookie-parser');
 
 const app = express();
@@ -27,6 +28,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 app.use(userRoute);
+
+app.use(courseRoute);
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
