@@ -30,17 +30,20 @@ const oAuth = async (req, res, next) => {
 
         if (error) {
             res.status(401).json({
+                status: 'error',
                 message: 'Invalid login credentials'
             });
 
         } else if (data) {
             res.status(200).json({
+                status: 'success',
                 url: data.url
             });
         }
 
     } catch (error) {
         res.status(500).json({
+            status: 'error',
             message: error.message
         });
     }
@@ -57,6 +60,7 @@ const loginEmail = async (req, res, next) => {
         
         if (error) {
             res.status(401).json({
+                status: 'error',
                 message: error.message
             });
             return;
@@ -71,6 +75,7 @@ const loginEmail = async (req, res, next) => {
             }
             
             res.status(200).json({
+                status: 'success',
                 message: 'User logged in successfully!',
                 session: session
             });
@@ -79,6 +84,7 @@ const loginEmail = async (req, res, next) => {
     } catch (error) {
 
         res.status(500).json({
+            status: 'error',
             message: error.message
         });
     }
@@ -98,6 +104,7 @@ const registerEmail = async (req, res, next) => {
 
         if (users.length > 0) {
             res.status(400).json({
+                status: 'error',
                 message: 'Email already exists!'
             });
             return;
@@ -119,11 +126,13 @@ const registerEmail = async (req, res, next) => {
         }
 
         res.status(201).json({
+            status: 'success',
             message: 'User created successfully!'
         });
 
     } catch (error) {
         res.status(500).json({
+            status: 'error',
             message: error.message
         });
     }
@@ -155,11 +164,13 @@ const deleteUser = async (req, res, next) => {
         }
 
         res.status(200).json({
+            status: 'success',
             message: 'User deleted successfully!'
         });
 
     } catch (error) {
         res.status(500).json({
+            status: 'error',
             message: error.message
         });
     }
@@ -177,6 +188,7 @@ const recoverAccount = async (req, res, next) => {
 
         if (users.length == 0) {
             res.status(400).json({
+                status: 'error',
                 message: 'Email does not exist!'
             });
             return;
@@ -191,11 +203,13 @@ const recoverAccount = async (req, res, next) => {
         } 
 
         res.status(200).json({
+            status: 'success',
             message: 'Password Recovery already sent to your email!'
         });
 
     } catch(error) {
         res.status(500).json({
+            status: 'error',
             message: error.message
         });
     }
@@ -209,6 +223,7 @@ const recoverPassword = async (req, res, next) => {
 
         if (checks) {
             res.status(401).json({
+                status: 'error',
                 message: 'Unauthorized access!'
             });
             return;
@@ -223,11 +238,13 @@ const recoverPassword = async (req, res, next) => {
         }
 
         res.status(200).json({
+            status: 'success',
             message: 'Password is changed!'
         });
         
     } catch (error){
         res.status(500).json({
+            status: 'error',
             message: error.message
         });
     }
@@ -244,6 +261,7 @@ const updateProfile = async (req, res, next) => {
 
         if (checks) {
             res.status(401).json({
+                status: 'error',
                 message: 'Unauthorized access!'
             });
             return;
@@ -297,12 +315,14 @@ const updateProfile = async (req, res, next) => {
         }
 
         res.status(200).json({
+            status: 'success',
             message: 'Succesfully Update Profile!',
             profilePicture : imagePublicUrl
         });
         
     }catch(error){
         res.status(500).json({
+            status: 'error',
             message: error.message
         });
     }
