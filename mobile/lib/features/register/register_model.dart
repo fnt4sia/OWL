@@ -2,9 +2,9 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class RegisterModel {
-  static Future<bool> registerEmail(String email, String password) async {
+  static Future registerEmail(String email, String password) async {
     final response = await http.post(
-      Uri.parse('https://nodejsdeployowl.et.r.appspot.com/register/mobile'),
+      Uri.parse('https://nodejsdeployowl.et.r.appspot.com/register'),
       headers: {'Content-Type': 'application/json'},
       body: jsonEncode(
         {
@@ -14,10 +14,9 @@ class RegisterModel {
       ),
     );
 
-    if (response.statusCode == 201) {
-      return true;
-    } else {
-      return false;
-    }
+    final responseBody = jsonDecode(response.body);
+
+    print(responseBody);
+    return responseBody;
   }
 }
