@@ -20,7 +20,7 @@ class _LoginPageState extends State<LoginPage> {
   void handleLogin() {
     LoginModel.loginEmail(emailController.text, passwordController.text)
         .then((value) {
-      if (value['message'] == "success") {
+      if (value['status'] == "success") {
         Navigator.of(context).pushReplacementNamed('/main');
       } else {
         setState(() {

@@ -17,7 +17,7 @@ class _NavbarState extends State<Navbar> {
       padding: EdgeInsets.symmetric(
         horizontal: MediaQuery.of(context).size.width * 0.04,
       ),
-      height: MediaQuery.of(context).size.height * 0.11,
+      height: MediaQuery.of(context).size.height * 0.1,
       decoration: BoxDecoration(
         color: Colors.white,
         border: Border.all(
@@ -53,25 +53,26 @@ class _NavbarState extends State<Navbar> {
       },
       child: Container(
         padding: EdgeInsets.symmetric(
-          horizontal: MediaQuery.of(context).size.width * 0.02,
+          horizontal: MediaQuery.of(context).size.width * 0.01,
         ),
-        width: MediaQuery.of(context).size.width * 0.16,
+        width: MediaQuery.of(context).size.width * 0.17,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(
-              Icons.home,
-              size: 36,
-              color: navbarIndex == widget.selectedIndex
-                  ? Colors.blue
-                  : Colors.black,
+            Image.asset(
+              navbarIndex == widget.selectedIndex
+                  ? 'assets/nav/${label.toLowerCase()}_active.png'
+                  : 'assets/nav/${label.toLowerCase()}.png',
+              width: MediaQuery.of(context).size.width * 0.07,
+              height: MediaQuery.of(context).size.width * 0.07,
             ),
+            const SizedBox(height: 3),
             FittedBox(
               child: Text(
                 label,
                 style: const TextStyle(
-                  color: Colors.blue,
-                  fontSize: 10,
+                  color: Colors.black,
+                  fontSize: 12,
                 ),
               ),
             ),
