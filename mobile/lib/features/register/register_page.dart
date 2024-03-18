@@ -35,7 +35,7 @@ class _RegisterPageState extends State<RegisterPage> {
         RegisterModel.registerEmail(
                 emailController.text, passwordController.text)
             .then((value) {
-          if (value) {
+          if (value['message'] == "success") {
             Navigator.push(
               context,
               MaterialPageRoute(
@@ -45,7 +45,7 @@ class _RegisterPageState extends State<RegisterPage> {
             );
           } else {
             setState(() {
-              errorText = "Email Is Already Exist!";
+              errorText = value["message"];
             });
           }
         });
