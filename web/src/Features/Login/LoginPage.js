@@ -2,7 +2,7 @@ import googleIcon from '../../Assets/google.png'
 import githubIcon from '../../Assets/github.png'
 import image from '../../Assets/login.png'
 import { useState, useEffect } from 'react'
-import {sendData, oauth} from './LoginModel'
+import {loginEmail, loginOauth} from './LoginModel'
 import CheckUserLoggedIn  from "../../Hooks/CheckUser"
 
 
@@ -10,13 +10,29 @@ export default function LoginPage(){
     
     const[email, setEmail] = useState('');
     const[password, setPassword] = useState('');
-    // const[loginResponse, setResponse] = useState()
+    const[errorText, setErrorText] = useState('');
 
     const onChangeEmail = (e) => {
         setEmail(e.target.value)
     } 
+
     const onChangePassword = (e) => {
         setPassword(e.target.value)
+    }
+
+    const  handleLoginEmail = async (email, password) => {
+        setErrorText('');
+        let response = await loginEmail(email, password)
+
+        if(response.status == "success"){
+            window.location.href = '/'
+        }else{
+            setErrorText(response.message)
+        }
+    }
+
+    const handleLoginOauth = async (provider) => {
+        loginOauth(provider)
     }
 
     useEffect(() => {
@@ -28,18 +44,6 @@ export default function LoginPage(){
         }
         check();
     }, [])
-
-
-    const  login = async (email, password) => {
-        let res = await sendData(email, password)
-        console.log(res)
-        // setResponse(sendData(email, password));
-    }
-
-    // useEffect(()=>{
-    //     console.log(loginResponse)
-    //     // if(loginResponse.)
-    // },[setResponse])
 
 
     return(
@@ -61,18 +65,20 @@ export default function LoginPage(){
                         <p className="text-sm">&nbsp;Remember Me</p>
                     </div>
                 </div>
-                <button onClick={() => login(email, password)} className="bg-orange-400 p-1 rounded-md font-light mt-2 lg:mt-4 lg:text-lg">Login</button>
+                {
+                    errorText ? <p className='text-red-500 text-center'>{errorText}</p> : <></> 
+                }
+                <button onClick={() => handleLoginEmail(email, password)} className="bg-orange-400 p-1 rounded-md font-light mt-2 lg:mt-4 lg:text-lg">Login</button>
                 <hr className="my-4"/>
                 <button 
                     className="text-blue font-light p-1 lg:p-2 border border-blue-300 rounded-lg bg-white text-blue-300 flex justify-center items-center gap-2" 
-                    onClick={() => oauth("google")}
-                >
+                    onClick={() => handleLoginOauth("google")}> 
                     <img alt='gugel'src={googleIcon} width={20} height={20}/>
                     Login With Google
                 </button>
                 <button 
                     className="text-blue font-light p-1 lg:p-2 border border-blue-300 rounded-lg mt-2 bg-white text-blue-300 flex justify-center items-center gap-2" 
-                    onClick={() => oauth("github")}
+                    onClick={() => handleLoginOauth("github")}
                 >
                     <img alt='github' src={githubIcon} width={20} height={20}/>Login With Github
                 </button>

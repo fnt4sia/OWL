@@ -1,5 +1,3 @@
-import supabase from '../../Middleware/Supabase';
-
 const sendData = async (email, password) => {
     fetch('https://nodejsdeployowl.et.r.appspot.com/register/web', {
         method: 'POST',
@@ -12,7 +10,7 @@ const sendData = async (email, password) => {
     }).then((response) =>
         console.log(response.text())
     ).then(()=>{
-        // window.location.href = '/login'
+        window.location.href = '/login'
     }).catch((err) => console.log(err))
 }
 
