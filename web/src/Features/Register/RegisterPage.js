@@ -2,7 +2,7 @@ import googleIcon from '../../Assets/google.png'
 import githubIcon from '../../Assets/github.png'
 import image from '../../Assets/login.png'
 import { useState, useEffect } from 'react'
-import {sendData, oauth} from './RegisterModel'
+import {registerEmail} from './RegisterModel'
 import CheckUserLoggedIn from '../../Hooks/CheckUser'
 
 export default function RegisterPage(){
@@ -10,7 +10,8 @@ export default function RegisterPage(){
     const[email, setEmail] = useState('');
     const[password, setPassword] = useState('');
     const[password2, setPassword2] = useState('');
-
+    const[errorText, setErrorText] = useState('');
+    const[successText , setSuccessText] = useState('');
 
     const onChangeEmail = (e) => {
         setEmail(e.target.value)
@@ -21,13 +22,22 @@ export default function RegisterPage(){
     const onChangePassword2 = (e) => {
         setPassword2(e.target.value)
     }
-    const register = async (email, password) => {
-        if(password === password2){
-            sendData(email, password).then((response)=>{
-                console.log(response)
-            })
-        } else{
-            console.log("password is not the same")
+
+    const handleRegister = async (email, password) => {
+        setErrorText('');
+        setSuccessText('');
+
+        if(password != password2){
+            setErrorText("Password Isn't Matching")
+            return
+        }
+
+        let response = await registerEmail(email, password)
+
+        if(response.status == "success"){
+            setSuccessText("Please Check Your Email")
+        }else{
+            setErrorText(response.message)
         }
     }
 
@@ -52,36 +62,16 @@ export default function RegisterPage(){
                     <span className="text-2xl lg:text-4xl font-bold"> OWL.</span>
                 </div>
                 <p className="text-base lg:text-lg ">Silahkan masukkan informasi akun kamu.</p>
-
-                    <div className="flex flex-col gap-4 mt-4">
-                        <input type="email" value={email} onChange={onChangeEmail} className="border-gray-400 border rounded-md py-1 lg:py-2 px-3 placeholder-black placeholder-opacity-70" placeholder="Email"/>
-                        <input type="password" password={password} onChange={onChangePassword} className="border-gray-400 border rounded-md py-1 lg:py-2 px-3 placeholder-black placeholder-opacity-70" placeholder="Password"/>
-                        <input type="password" password={password2} onChange={onChangePassword2} className="border-gray-400 border rounded-md py-1 lg:py-2 px-3 placeholder-black placeholder-opacity-70" placeholder="Confirm Password"/>
-                        <div className="flex">
-                            <input type="checkbox"/>
-                            <p className="text-sm">&nbsp;Remember Me</p>
-                        </div>
-                    </div>
-                    <button 
-                    onClick={() => register(email, password)} 
-                    className="bg-orange-400 p-1 rounded-md font-light mt-2 lg:mt-4 lg:text-lg">Register</button>
-
+                <div className="flex flex-col gap-4 mt-4">
+                    <input type="email" value={email} onChange={onChangeEmail} className="border-gray-400 border rounded-md py-1 lg:py-2 px-3 placeholder-black placeholder-opacity-70" placeholder="Email"/>
+                    <input type="password" password={password} onChange={onChangePassword} className="border-gray-400 border rounded-md py-1 lg:py-2 px-3 placeholder-black placeholder-opacity-70" placeholder="Password"/>
+                    <input type="password" password={password2} onChange={onChangePassword2} className="border-gray-400 border rounded-md py-1 lg:py-2 px-3 placeholder-black placeholder-opacity-70" placeholder="Confirm Password"/>
+                </div>
+                {errorText ? <p className='text-red-500 text-center'>{errorText}</p> : <></>}
+                {successText ? <p className='text-green-500 text-center'>{successText}</p> : <></>}
+                <button onClick={() => handleRegister(email, password)} className="bg-orange-400 p-1 rounded-md font-light mt-2 lg:mt-4 lg:text-lg">Register</button>
                 <hr className="my-4"/>
-                <button 
-                    className="text-blue font-light p-1 lg:p-2 border border-blue-300 rounded-lg bg-white text-blue-300 flex justify-center items-center gap-2" 
-                    onClick={() => oauth("google")}
-                >
-                    <img alt='gugel'src={googleIcon} width={20} height={20}/>
-                    Register With Google
-                </button>
-                <button 
-                    className="text-blue font-light p-1 lg:p-2 border border-blue-300 rounded-lg mt-2 bg-white text-blue-300 flex justify-center items-center gap-2" 
-                    onClick={() => oauth("github")}
-                >
-                    <img alt='github' src={githubIcon} width={20} height={20}/>Register With Github
-                </button>
-                
-                <div className="text-center text-sm mt-2">
+                <div className="text-center text-sm">
                     <span>Sudah punya akun? </span>
                     <a href='/login'>
                         <span className="text-blue-300">Masuk disini</span>
