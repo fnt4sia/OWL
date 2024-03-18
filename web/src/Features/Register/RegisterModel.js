@@ -1,5 +1,5 @@
 const sendData = async (email, password) => {
-    fetch('https://nodejsdeployowl.et.r.appspot.com/register/web', {
+    fetch('https://nodejsdeployowl.et.r.appspot.com/register', {
         method: 'POST',
         headers: {"Content-Type": "application/json"},
         body: JSON.stringify({
