@@ -1,8 +1,12 @@
 const express = require('express');
-const { getCourse } = require('../controllers/courses');
+const { getCourse, getTopics, getMaterials } = require('../controllers/courses');
 
 const router = express.Router();
 
 router.get('/courses', getCourse);
+
+router.get('/topics/:courseID', getTopics);
+
+router.get('/materials/:topicID', getMaterials);
 
 module.exports = router;

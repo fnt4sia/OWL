@@ -289,7 +289,7 @@ const updateProfile = async (req, res, next) => {
                     throw new Error(error.message);
                 }
         
-                const { data: imageUrl } = await supabase.storage
+                const { data: imageUrl } = supabase.storage
                     .from('avatars')
                     .getPublicUrl(`${id}/avatar`);
         
