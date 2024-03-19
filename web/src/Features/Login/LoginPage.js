@@ -1,5 +1,6 @@
 import googleIcon from '../../Assets/google.png'
 import githubIcon from '../../Assets/github.png'
+import loading from '../../Assets/loading.gif'
 import image from '../../Assets/login.png'
 import { useState, useEffect } from 'react'
 import {loginEmail, loginOauth} from './LoginModel'
@@ -11,6 +12,7 @@ export default function LoginPage(){
     const[email, setEmail] = useState('');
     const[password, setPassword] = useState('');
     const[errorText, setErrorText] = useState('');
+    const[isLoading, setLoading] = useState(false);
 
     const onChangeEmail = (e) => {
         setEmail(e.target.value)
@@ -22,7 +24,9 @@ export default function LoginPage(){
 
     const  handleLoginEmail = async (email, password) => {
         setErrorText('');
+        setLoading(true)
         let response = await loginEmail(email, password)
+        setLoading(false)
 
         if(response.status == "success"){
             window.location.href = '/'
@@ -68,7 +72,11 @@ export default function LoginPage(){
                 {
                     errorText ? <p className='text-red-500 text-center'>{errorText}</p> : <></> 
                 }
-                <button onClick={() => handleLoginEmail(email, password)} className="bg-orange-400 p-1 rounded-md font-light mt-2 lg:mt-4 lg:text-lg">Login</button>
+                <button onClick={() => handleLoginEmail(email, password)} className="bg-orange-400 p-1 rounded-md font-light mt-2 lg:mt-4 lg:text-lg">
+                {
+                    isLoading ? <img src={loading} className='m-auto h-6 lg:h-7'/> : <>Login</>
+                }
+                </button>
                 <hr className="my-4"/>
                 <button 
                     className="text-blue font-light p-1 lg:p-2 border border-blue-300 rounded-lg bg-white text-blue-300 flex justify-center items-center gap-2" 
