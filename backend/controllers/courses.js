@@ -72,7 +72,7 @@ const addTopics = async(req, res, next) => {
     try {
         const { course_id, name } = req.body;
         const topicImage = req.file;
-        const rawData = topicImage.buffer
+        const rawData = topicImage.buffer;
 
         const { data: uploadData, error: uploadError } = supabase.storage
             .from('topicImage')
@@ -85,14 +85,28 @@ const addTopics = async(req, res, next) => {
         if (uploadError)
             throw new Error(uploadError.message);
         
+
+        const { data: imageUrl } = supabase.storage
+            .from('topicImage')
+            .getPublicUrl(`${name}_image`);
+
+        imagePublicUrl = imageUrl.publicUrl;
+
         const { data, error } = await supabase.from('topics').insert(
             [
                 {
                     course_id: course_id,
-                    name: name
+                    name: name,
+                    image: imagePublicUrl
                 }
             ]
         )
+        
+        res.status(200).json({
+            message: 'Succesfuly added Topic!',
+             course_id: course_id,
+             name: name
+        });
     } catch (error) {
         res.status(500).json({
             message: error.message
