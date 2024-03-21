@@ -1,5 +1,4 @@
-import googleIcon from '../../Assets/google.png'
-import githubIcon from '../../Assets/github.png'
+import loading from '../../Assets/loading.gif'
 import image from '../../Assets/login.png'
 import { useState, useEffect } from 'react'
 import {registerEmail} from './RegisterModel'
@@ -12,6 +11,7 @@ export default function RegisterPage(){
     const[password2, setPassword2] = useState('');
     const[errorText, setErrorText] = useState('');
     const[successText , setSuccessText] = useState('');
+    const[isLoading, setLoading] = useState(false);
 
     const onChangeEmail = (e) => {
         setEmail(e.target.value)
@@ -32,7 +32,9 @@ export default function RegisterPage(){
             return
         }
 
+        setLoading(true)
         let response = await registerEmail(email, password)
+        setLoading(false)
 
         if(response.status == "success"){
             setSuccessText("Please Check Your Email")
@@ -69,7 +71,11 @@ export default function RegisterPage(){
                 </div>
                 {errorText ? <p className='text-red-500 text-center'>{errorText}</p> : <></>}
                 {successText ? <p className='text-green-500 text-center'>{successText}</p> : <></>}
-                <button onClick={() => handleRegister(email, password)} className="bg-orange-400 p-1 rounded-md font-light mt-2 lg:mt-4 lg:text-lg">Register</button>
+                <button onClick={() => handleRegister(email, password)} className="bg-orange-400 p-1 rounded-md font-light mt-2 lg:mt-4 lg:text-lg">
+                {
+                    isLoading ? <img src={loading} className='m-auto h-6 lg:h-7'/> : <>Register</>
+                }
+                </button>
                 <hr className="my-4"/>
                 <div className="text-center text-sm">
                     <span>Sudah punya akun? </span>
