@@ -68,6 +68,39 @@ const getTopics = async (req, res, next) => {
     }
 }
 
+const addTopics = async(req, res, next) => {
+    try {
+        const { course_id, name } = req.body;
+        const topicImage = req.file;
+        const rawData = topicImage.buffer
+
+        const { data: uploadData, error: uploadError } = supabase.storage
+            .from('topicImage')
+            .upload(`${name}_image`, rawData, {
+                cacheControl: 3600,
+                upsert: true,
+                contentType: topicImage.mimetype
+            })
+        
+        if (uploadError)
+            throw new Error(uploadError.message);
+        
+        const { data, error } = await supabase.from('topics').insert(
+            [
+                {
+                    course_id: course_id,
+                    name: name
+                }
+            ]
+        )
+    } catch (error) {
+        res.status(500).json({
+            message: error.message
+        });
+    }
+}
+
+////////////////////////////////////////get materials////////////////////////////////////////
 const getMaterials = async (req, res, next) => {
     try {
         const topicID = req.params.topicID;
@@ -104,4 +137,6 @@ const getMaterials = async (req, res, next) => {
     }
 }
 
-module.exports = { getCourse, getTopics, getMaterials };
+
+
+module.exports = { getCourse, getTopics, addTopics, getMaterials };

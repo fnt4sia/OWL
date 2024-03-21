@@ -328,6 +328,7 @@ const updateProfile = async (req, res, next) => {
     }
 }
 
+/////////////////////////////////////////////////////fetch user/////////////////////////////////////////////////////
 const getUser = async(req, res, next) => {
     try {
         const access_token = req.body.access_token;
