@@ -105,7 +105,8 @@ const addTopics = async(req, res, next) => {
         res.status(200).json({
             message: 'Succesfuly added Topic!',
              course_id: course_id,
-             name: name
+             name: name,
+             imageUrl: imagePublicUrl
         });
     } catch (error) {
         res.status(500).json({
