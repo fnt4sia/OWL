@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:mobile/features/login/login_page.dart';
 import 'package:mobile/features/register/register_model.dart';
 import '../../shared/widgets/background.dart';
 import '../../shared/widgets/text_field.dart';
@@ -36,12 +35,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 emailController.text, passwordController.text)
             .then((value) {
           if (value['status'] == "success") {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => LoginPage(message: value['message']),
-              ),
-            );
+            Navigator.of(context).pushReplacementNamed('/verif');
           } else {
             setState(() {
               errorText = value["message"];
