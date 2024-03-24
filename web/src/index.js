@@ -8,6 +8,7 @@ import {
 import LoginPage from './Features/Login/LoginPage';
 import HomePage from './Features/Home/HomePage';
 import RegisterPage from './Features/Register/RegisterPage';
+import VerificationPage from './Features/Verification/VerificationPage';
 
 const router = createBrowserRouter([
   {
@@ -21,6 +22,10 @@ const router = createBrowserRouter([
   {
     path: "/register",
     element: <RegisterPage/>,
+  },
+  {
+    path: "/verification",
+    element: <VerificationPage/>,
   }
 ]);
 

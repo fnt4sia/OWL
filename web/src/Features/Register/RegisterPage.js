@@ -37,7 +37,7 @@ export default function RegisterPage(){
         setLoading(false)
 
         if(response.status == "success"){
-            setSuccessText("Please Check Your Email")
+            window.location.href = `/verification?email=${email}`
         }else{
             setErrorText(response.message)
         }
